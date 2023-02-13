@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
     controller.addListener(() {
       print(controller.value.getMaxScaleOnAxis());
-      noodles();
 
       matrix3 = Matrix4(
           controller.value.getMaxScaleOnAxis(),
@@ -178,7 +177,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                potato,
+                noodles(screenSize.width),
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, (((screenSize.height) / 2) - (100 / 2)), 0, 0),

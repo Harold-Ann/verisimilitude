@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-var tomato = 1;
-
-var sauce = "pee";
-
-noodles() {
-  print(sauce);
-}
-
 Widget potato = Row(
   children: [
     Padding(
@@ -37,3 +29,7 @@ Widget potato = Row(
     ),
   ],
 );
+
+noodles(width) {
+  return potato;
+}
