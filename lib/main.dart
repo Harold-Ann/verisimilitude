@@ -136,6 +136,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                   roundedZ = _zValue.toStringAsFixed(0);
                   roundedX = (_xValue.abs()).toStringAsFixed(0);
                   roundedY = (_yValue.abs()).toStringAsFixed(0);
+
+                  random2() {}
                 } else {
                   if (Platform.isAndroid) {
                     // Android-specific code
@@ -177,8 +179,13 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                noodles(2, screenSize),
-                pancakes(2, screenSize),
+                Row(
+                  children: timePeriodGenerator(14, screenSize),
+                  //millennia millennium
+                  //centuries century
+                  //decades decade
+                  //years year
+                ),
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, (((screenSize.height) / 2) - (100 / 2)), 0, 0),
