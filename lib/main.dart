@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(seconds: 1));
 
     controller.addListener(() {
-      print(controller.value.getMaxScaleOnAxis());
+      //print(controller.value.getMaxScaleOnAxis());
 
       matrix3 = Matrix4(
           controller.value.getMaxScaleOnAxis(),
@@ -177,7 +177,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                noodles(screenSize.width),
+                noodles(2, screenSize),
+                pancakes(2, screenSize),
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, (((screenSize.height) / 2) - (100 / 2)), 0, 0),
@@ -470,7 +471,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     controllerNow.reset();
     controllerNow.fling();
 
-    print("now Z value: $_zValue");
+    //print("now Z value: $_zValue");
     // setState(() {
     //   controller.value = Matrix4.identity();
     // });
@@ -490,7 +491,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     controllerNow1.fling();
 
     //print(_currentMatrix);
-    print("now1 Z value: $_zValue");
+    //print("now1 Z value: $_zValue");
     // setState(() {
     //   controller.value = Matrix4.identity();
     // });
