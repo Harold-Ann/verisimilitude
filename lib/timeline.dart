@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'dart:math';
 
 randy(upper) {
@@ -9,7 +7,7 @@ randy(upper) {
 }
 
 timePeriod(current, totalAmount, screenSize, scaleFactor) {
-  print("amount of rectangles active");
+  //print("amount of rectangles active");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -18,7 +16,7 @@ timePeriod(current, totalAmount, screenSize, scaleFactor) {
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 150, randy(255), randy(255)),
+          color: Color.fromARGB(255, 255, randy(255), randy(255)),
         ),
       ),
     ),
@@ -26,26 +24,8 @@ timePeriod(current, totalAmount, screenSize, scaleFactor) {
   return timePeriod;
 }
 
-filler(current, totalAmount, screenSize, scaleFactor) {
-  print("amount of filler active");
-  Widget spaceTakerUpper = Padding(
-    padding: EdgeInsets.fromLTRB(
-        0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
-    child: SizedBox(
-      width: screenSize.width / totalAmount,
-      height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-      ),
-    ),
-  );
-  return spaceTakerUpper;
-}
-
-filler1(totalAmount, screenSize, scaleFactor) {
-  print("amount of filler1 active $totalAmount");
+filler(totalAmount, screenSize, scaleFactor) {
+  //print("amount of filler1 active $totalAmount");
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         1, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -86,10 +66,10 @@ timePeriodGenerator1(totalAmount, screenSize, scaleFactor, xVal, yVal, zVal) {
           (((roundZ * screenSize.height) / 2) - screenSize.height) &&
       (roundZ.abs()) >= 12) {
     if (totalAmount < 100) {
-      currentStack.add(filler1(totalAmount, screenSize, scaleFactor));
+      currentStack.add(filler(totalAmount, screenSize, scaleFactor));
     }
     if (totalAmount > 100) {
-      currentStack.add(filler1(12, screenSize, scaleFactor));
+      currentStack.add(filler(12, screenSize, scaleFactor));
     }
     for (var i = 0; i < totalAmount; i++) {
       if (i >= totalAmount - (totalAmount / 12)) {

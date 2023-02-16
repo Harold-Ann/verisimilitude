@@ -45,6 +45,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
   late var months = years * 12;
   final controller = TransformationController();
   late AnimationController controllerReset;
+  late AnimationController controllerLeft;
   late AnimationController controllerNow;
   late AnimationController controllerNow1;
 
@@ -53,6 +54,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
   var matrix2 = Matrix4.identity();
   var matrix3 = Matrix4.identity();
+
+  var matrix5 = Matrix4.identity();
 
   var _currentMatrix = Matrix4.identity();
 
@@ -69,11 +72,23 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     controllerNow1 =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
 
+    controllerLeft =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
     controller.addListener(() {
       _currentMatrix = controller.value;
       _zValue = controller.value.getMaxScaleOnAxis();
       _xValue = controller.value.row0[3];
       _yValue = controller.value.row1[3];
+
+      // moves the screen to the left 500
+      // matrix5 = controller.value;
+      // var newX = controller.value.row0[3] += 500;
+      // print(matrix5.row0[3]);
+      // print(newX);
+      // matrix5 = Matrix4(_zValue, 0, 0, 0, 0, _zValue, 0, 0, 0, 0, _zValue, 0,
+      //     newX, _yValue, 0, 1);
+      // print(matrix5.row0[3]);
 
       // matrix3 = Matrix4(
       //     controller.value.getMaxScaleOnAxis(),
@@ -112,16 +127,19 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           height: double.infinity,
           child: InteractiveViewer(
             onInteractionEnd: (details) {
-              roundedZ = _zValue.toStringAsFixed(0);
-              roundedX = (_xValue.abs()).toStringAsFixed(0);
-              roundedY = (_yValue.abs()).toStringAsFixed(0);
+              // roundedZ = _zValue.toStringAsFixed(0);
+              // roundedX = (_xValue.abs()).toStringAsFixed(0);
+              // roundedY = (_yValue.abs()).toStringAsFixed(0);
               print("Stop");
-              print(checkNearby(_xValue, _yValue, _zValue));
-
+              //print(checkNearby(_xValue, _yValue, _zValue));
+              /*print(appalachianTrail(
+                  screenSize, _xValue, _yValue, _zValue, millenia, (0.5)));
+              */
               setState(() {
-                roundedZ = _zValue.toStringAsFixed(0);
+                roundedZ = _zValue.toStringAsFixed(1);
                 roundedX = (_xValue.abs()).toStringAsFixed(0);
                 roundedY = (_yValue.abs()).toStringAsFixed(0);
+
                 //draw(_xValue, _yValue);
                 //if (kIsWeb) {
                 /*
@@ -195,18 +213,19 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 */
 
                 Row(
-                  children: timePeriodGenerator1(
-                      12, screenSize, (8), _xValue, _yValue, _zValue),
-                  //14 millennia millennium 12
-                ),
+                    children: appalachianTrail(
+                        screenSize, _xValue, _yValue, _zValue, millenia, (0.5))
+                    //timePeriodGenerator1(12, screenSize, (0.5), _xValue, _yValue, _zValue),
+                    //14 millennia millennium 12
+                    ),
                 Row(
                   children: timePeriodGenerator1(
-                      12 * 10, screenSize, (16), _xValue, _yValue, _zValue),
+                      12 * 10, screenSize, (2), _xValue, _yValue, _zValue),
                   //10 centuries century per millennia millennium 12 * 10
                 ),
                 Row(
                   children: timePeriodGenerator1(
-                      12 * 10, screenSize, (32), _xValue, _yValue, _zValue),
+                      12 * 10, screenSize, (8), _xValue, _yValue, _zValue),
                   //10 decades decade per centuries century 12 * 10 * 10
                 ),
                 Row(
@@ -475,8 +494,9 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                           onPressed: reset, icon: const Icon(Icons.business)),
                       IconButton(
                           onPressed: now, icon: const Icon(Icons.architecture)),
-                      //IconButton(
-                      //onPressed: draw(_xValue, _yValue), icon: const Icon(Icons.gamepad)),
+                      IconButton(
+                          onPressed: () => moveLeft(_xValue),
+                          icon: const Icon(Icons.gamepad)),
                     ],
                   ),
                 ),
@@ -517,6 +537,21 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     // setState(() {
     //   controller.value = Matrix4.identity();
     // });
+  }
+
+  moveLeft(xVal) {
+    print(matrix5);
+    final animationLeft = Matrix4Tween(
+      begin: controller.value,
+      end: matrix5,
+    ).animate(controllerLeft);
+
+    animationLeft.addListener(() {
+      controller.value = animationLeft.value;
+    });
+
+    controllerLeft.reset();
+    controllerLeft.fling();
   }
 
   // draw(x, y) {
