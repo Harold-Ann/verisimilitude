@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'timeline.dart';
+import 'lazyLoader.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,6 +38,11 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
   String roundedZ = "";
   String roundedX = "";
   String roundedY = "";
+  var millenia = 12;
+  late var centuries = millenia * 10;
+  late var decades = centuries * 10;
+  late var years = decades * 10;
+  late var months = years * 12;
   final controller = TransformationController();
   late AnimationController controllerReset;
   late AnimationController controllerNow;
@@ -64,30 +70,30 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: Duration(seconds: 1));
 
     controller.addListener(() {
-      //print(controller.value.getMaxScaleOnAxis());
-
-      matrix3 = Matrix4(
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          0,
-          0,
-          0,
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          0,
-          0,
-          0,
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          /*-148072500*/ (1500 * controller.value.getMaxScaleOnAxis()),
-          -49308142,
-          0,
-          1);
-
-      _zValue = controller.value.getMaxScaleOnAxis();
       _currentMatrix = controller.value;
+      _zValue = controller.value.getMaxScaleOnAxis();
       _xValue = controller.value.row0[3];
       _yValue = controller.value.row1[3];
+
+      // matrix3 = Matrix4(
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     0,
+      //     0,
+      //     0,
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     0,
+      //     0,
+      //     0,
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     /*-148072500*/ (1500 * controller.value.getMaxScaleOnAxis()),
+      //     -49308142,
+      //     0,
+      //     1);
+
+      print("Go");
     });
   }
 
@@ -105,46 +111,52 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           width: double.infinity,
           height: double.infinity,
           child: InteractiveViewer(
-            onInteractionUpdate: (details) {
+            onInteractionEnd: (details) {
+              roundedZ = _zValue.toStringAsFixed(0);
+              roundedX = (_xValue.abs()).toStringAsFixed(0);
+              roundedY = (_yValue.abs()).toStringAsFixed(0);
+              print("Stop");
+              print(checkNearby(_xValue, _yValue, _zValue));
+
               setState(() {
-                if (kIsWeb) {
-                  var matrix2 = Matrix4(
-                      _zValue,
-                      0,
-                      0,
-                      0,
-                      0,
-                      _zValue,
-                      0,
-                      0,
-                      0,
-                      0,
-                      _zValue,
-                      0,
-                      /*-148072500*/ screenSize.width * _zValue,
-                      -49308142,
-                      0,
-                      1);
+                roundedZ = _zValue.toStringAsFixed(0);
+                roundedX = (_xValue.abs()).toStringAsFixed(0);
+                roundedY = (_yValue.abs()).toStringAsFixed(0);
+                //draw(_xValue, _yValue);
+                //if (kIsWeb) {
+                /*
+                var matrix2 = Matrix4(
+                    _zValue,
+                    0,
+                    0,
+                    0,
+                    0,
+                    _zValue,
+                    0,
+                    0,
+                    0,
+                    0,
+                    _zValue,
+                    0,
+                    /*-148072500*/ screenSize.width * _zValue,
+                    -49308142,
+                    0,
+                    1);
+                */
+                //if (_zValue < 1) {
+                //  _zValue = 1;
+                //}
+                //if (_zValue > 98716) {
+                //  _zValue = 98716;
+                //}
 
-                  if (_zValue < 1) {
-                    _zValue = 1;
-                  }
-                  if (_zValue > 98716) {
-                    _zValue = 98716;
-                  }
-
-                  roundedZ = _zValue.toStringAsFixed(0);
-                  roundedX = (_xValue.abs()).toStringAsFixed(0);
-                  roundedY = (_yValue.abs()).toStringAsFixed(0);
-
-                  random2() {}
-                } else {
-                  if (Platform.isAndroid) {
-                    // Android-specific code
-                  } else if (Platform.isIOS) {
-                    // iOS-specific code
-                  }
-                }
+                // } else {
+                //   if (Platform.isAndroid) {
+                //     // Android-specific code
+                //   } else if (Platform.isIOS) {
+                //     // iOS-specific code
+                //   }
+                // }
               });
             },
             boundaryMargin: EdgeInsets.all(0),
@@ -153,6 +165,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             transformationController: controller,
             child: Stack(
               children: [
+                /*
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, ((screenSize.height) / 2) - (100 * 4), 0, 0),
@@ -179,16 +192,32 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+                */
+
                 Row(
-                  children: timePeriodGenerator(14, screenSize),
-                  //millennia millennium
-                  //centuries century
-                  //decades decade
-                  //years year
+                  children: timePeriodGenerator1(
+                      12, screenSize, (8), _xValue, _yValue, _zValue),
+                  //14 millennia millennium 12
                 ),
+                Row(
+                  children: timePeriodGenerator1(
+                      12 * 10, screenSize, (16), _xValue, _yValue, _zValue),
+                  //10 centuries century per millennia millennium 12 * 10
+                ),
+                Row(
+                  children: timePeriodGenerator1(
+                      12 * 10, screenSize, (32), _xValue, _yValue, _zValue),
+                  //10 decades decade per centuries century 12 * 10 * 10
+                ),
+                Row(
+                  children: timePeriodGenerator1(
+                      12 * 10, screenSize, (64), _xValue, _yValue, _zValue),
+                  //10 years year per decades decade 12 * 10 * 10 * 10
+                ),
+                /*
                 Padding(
                   padding: EdgeInsets.fromLTRB(
-                      0, (((screenSize.height) / 2) - (100 / 2)), 0, 0),
+                      0, (((screenSize.height) / 2) - (100 * (1 / 2))), 0, 0),
                   child: SizedBox(
                     width: screenSize.width,
                     height: 100,
@@ -199,6 +228,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+                */
+                /*
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, ((screenSize.height) / 2) - (100 / 4), 0, 0),
@@ -212,6 +243,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
+                */
+                /*
                 Padding(
                   padding: EdgeInsets.fromLTRB(
                       0, ((screenSize.height) / 2) - (100 / 8), 0, 0),
@@ -225,201 +258,203 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 16), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 8,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.yellow,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 32), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 16,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 64), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 32,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 50, 21, 216),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 128), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 64,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 256), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 128,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 204, 176, 14),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 512), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 256,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 81, 5),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 1024), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 512,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 26, 210, 235),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 2048), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 1024,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 95, 5, 212),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 4096), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 2048,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 15, 58, 19),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 8192), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 4096,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 5, 40),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 16384), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 8192,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 195, 5, 212),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 32768), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 16384,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 208, 5),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 65536), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 32768,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 0, 88, 160),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 131072), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 65536,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 27, 160, 0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 262144), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 131072,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 123, 35),
-                      ),
-                    ),
-                  ),
-                ),
+                */
+
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 16), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 8,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Colors.yellow,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 32), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 16,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Colors.purple,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 64), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 32,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 50, 21, 216),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 128), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 64,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 0, 0, 0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 256), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 128,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 204, 176, 14),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 512), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 256,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 212, 81, 5),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 1024), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 512,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 26, 210, 235),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 2048), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 1024,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 95, 5, 212),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 4096), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 2048,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 15, 58, 19),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 8192), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 4096,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 212, 5, 40),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 16384), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 8192,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 195, 5, 212),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 32768), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 16384,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 212, 208, 5),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 65536), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 32768,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 0, 88, 160),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 131072), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 65536,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 27, 160, 0),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       0, ((screenSize.height) / 2) - (100 / 262144), 0, 0),
+                //   child: SizedBox(
+                //     width: screenSize.width,
+                //     height: 100 / 131072,
+                //     child: Container(
+                //       decoration: const BoxDecoration(
+                //         color: Color.fromARGB(255, 255, 123, 35),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -440,8 +475,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                           onPressed: reset, icon: const Icon(Icons.business)),
                       IconButton(
                           onPressed: now, icon: const Icon(Icons.architecture)),
-                      IconButton(
-                          onPressed: now1, icon: const Icon(Icons.gamepad)),
+                      //IconButton(
+                      //onPressed: draw(_xValue, _yValue), icon: const Icon(Icons.gamepad)),
                     ],
                   ),
                 ),
@@ -484,25 +519,24 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     // });
   }
 
-  void now1() {
-    final animationNow1 = Matrix4Tween(
-      begin: controller.value,
-      end: matrix2,
-    ).animate(controllerNow1);
+  // draw(x, y) {
+  //   Widget testBoxing SizedBox(
+  //     width: 20,
+  //     height: 20,
+  //     child: Container(
+  //       decoration: BoxDecoration(
+  //         color: Color.fromARGB(255, 205, randy(255), randy(255)),
+  //       ),
+  //     ),
+  //   );
+  //   return testBoxing;
 
-    animationNow1.addListener(() {
-      controller.value = animationNow1.value;
-    });
-
-    controllerNow1.reset();
-    controllerNow1.fling();
-
-    //print(_currentMatrix);
-    //print("now1 Z value: $_zValue");
-    // setState(() {
-    //   controller.value = Matrix4.identity();
-    // });
-  }
+  //   //print(_currentMatrix);
+  //   //print("now1 Z value: $_zValue");
+  //   // setState(() {
+  //   //   controller.value = Matrix4.identity();
+  //   // });
+  // }
 
   void reset() {
     final animationReset = Matrix4Tween(
