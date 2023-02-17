@@ -7,7 +7,7 @@ randy(upper) {
 }
 
 timePeriod(current, totalAmount, screenSize, scaleFactor) {
-  print("amount of rectangles active");
+  print("amount of rectangles active NEW");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -25,7 +25,7 @@ timePeriod(current, totalAmount, screenSize, scaleFactor) {
 }
 
 filler(totalAmount, screenSize, scaleFactor) {
-  print("amount of filler1 active $totalAmount");
+  print("amount of filler1 active NEW $totalAmount");
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         1, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),

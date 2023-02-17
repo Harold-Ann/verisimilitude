@@ -132,9 +132,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
               // roundedY = (_yValue.abs()).toStringAsFixed(0);
               print("Stop");
               //print(checkNearby(_xValue, _yValue, _zValue));
-              /*print(appalachianTrail(
-                  screenSize, _xValue, _yValue, _zValue, millenia, (0.5)));
-              */
+              appalachianTrail(
+                  screenSize, _xValue, _yValue, _zValue, millenia, (0.5));
               setState(() {
                 roundedZ = _zValue.toStringAsFixed(1);
                 roundedX = (_xValue.abs()).toStringAsFixed(0);
@@ -211,13 +210,38 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                   ),
                 ),
                 */
+                /*
+                Row(
+                  children: [
+                    appalachianTrail(
+                        screenSize, _xValue, _yValue, _zValue, millenia, (0.5))
+                  ],
+                ),
+                Row(
+                  children: [
+                    appalachianTrail(
+                        screenSize, _xValue, _yValue, _zValue, millenia, (2))
+                  ],
+                ),
+                Row(
+                  children: [
+                    appalachianTrail(
+                        screenSize, _xValue, _yValue, _zValue, millenia, (8))
+                  ],
+                ),
+                Row(
+                  children: [
+                    appalachianTrail(
+                        screenSize, _xValue, _yValue, _zValue, millenia, (64))
+                  ],
+                ),
+                */
 
                 Row(
-                    children: appalachianTrail(
-                        screenSize, _xValue, _yValue, _zValue, millenia, (0.5))
-                    //timePeriodGenerator1(12, screenSize, (0.5), _xValue, _yValue, _zValue),
-                    //14 millennia millennium 12
-                    ),
+                  children: timePeriodGenerator1(
+                      12, screenSize, (0.5), _xValue, _yValue, _zValue),
+                  //14 millennia millennium 12
+                ),
                 Row(
                   children: timePeriodGenerator1(
                       12 * 10, screenSize, (2), _xValue, _yValue, _zValue),
@@ -233,6 +257,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                       12 * 10, screenSize, (64), _xValue, _yValue, _zValue),
                   //10 years year per decades decade 12 * 10 * 10 * 10
                 ),
+
                 /*
                 Padding(
                   padding: EdgeInsets.fromLTRB(
