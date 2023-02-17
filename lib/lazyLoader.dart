@@ -6,8 +6,8 @@ randy(upper) {
   return randomNum.nextInt(upper);
 }
 
-timePeriod(current, totalAmount, screenSize, scaleFactor) {
-  print("amount of rectangles active NEW");
+timePeriod(totalAmount, screenSize, scaleFactor) {
+  print("amount of rectangles active");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -25,12 +25,13 @@ timePeriod(current, totalAmount, screenSize, scaleFactor) {
 }
 
 filler(totalAmount, screenSize, scaleFactor) {
-  print("amount of filler1 active NEW $totalAmount");
+  print("amount of filler active $totalAmount");
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
-        1, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
+        0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
     child: SizedBox(
-      width: screenSize.width - (screenSize.width / totalAmount) - 1,
+      width: screenSize.width / totalAmount,
+      //width: screenSize.width - (screenSize.width / totalAmount) - 1,
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: const BoxDecoration(
@@ -68,9 +69,23 @@ appalachianTrail(
         break;
       }
     }
+    //print(currentSegment);
     if (totalSegments < 100) {
-      for (var i = 0; i < currentSegment; i++) {
-        currentStack.add(filler(currentSegment, screenSize, scaleFactor));
+      var displayedSegments = 0;
+      for (var i = 0; i < currentSegment - 2; i++) {
+        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+      }
+      if (currentSegment == 12 || currentSegment == 1) {
+        displayedSegments = 2;
+      } else {
+        displayedSegments = 3;
+      }
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+      }
+      //print("segments: total $totalSegments current $currentSegment");
+      for (var i = 0; i < (totalSegments - currentSegment - 1); i++) {
+        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
       }
     }
 
@@ -78,6 +93,10 @@ appalachianTrail(
     // if (currentSegment) {
 
     // }
+  } else {
+    for (var i = 0; i < totalSegments; i++) {
+      currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+    }
   }
   return currentStack;
 }

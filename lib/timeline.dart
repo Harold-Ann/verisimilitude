@@ -6,7 +6,7 @@ randy(upper) {
   return randomNum.nextInt(upper);
 }
 
-timePeriod(current, totalAmount, screenSize, scaleFactor) {
+timePeriod(totalAmount, screenSize, scaleFactor) {
   //print("amount of rectangles active");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
@@ -16,7 +16,7 @@ timePeriod(current, totalAmount, screenSize, scaleFactor) {
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, randy(255), randy(255)),
+          color: Color.fromARGB(255, 200, randy(255), randy(255)),
         ),
       ),
     ),
@@ -46,7 +46,7 @@ timePeriodGenerator(totalAmount, screenSize, scaleFactor, xVal, yVal, zVal) {
   List<Widget> currentStack = [];
 
   for (var i = 0; i < totalAmount; i++) {
-    currentStack.add(timePeriod(i, totalAmount, screenSize, scaleFactor));
+    currentStack.add(timePeriod(totalAmount, screenSize, scaleFactor));
   }
 
   return currentStack;
@@ -73,12 +73,12 @@ timePeriodGenerator1(totalAmount, screenSize, scaleFactor, xVal, yVal, zVal) {
     }
     for (var i = 0; i < totalAmount; i++) {
       if (i >= totalAmount - (totalAmount / 12)) {
-        currentStack.add(timePeriod(i, totalAmount, screenSize, scaleFactor));
+        currentStack.add(timePeriod(totalAmount, screenSize, scaleFactor));
       }
     }
   } else {
     for (var i = 0; i < totalAmount; i++) {
-      currentStack.add(timePeriod(i, totalAmount, screenSize, scaleFactor));
+      currentStack.add(timePeriod(totalAmount, screenSize, scaleFactor));
     }
   }
   return currentStack;
