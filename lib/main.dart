@@ -131,7 +131,6 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
               // roundedX = (_xValue.abs()).toStringAsFixed(0);
               // roundedY = (_yValue.abs()).toStringAsFixed(0);
               print("Stop");
-              //print(checkNearby(_xValue, _yValue, _zValue));
               //appalachianTrail(
               //    screenSize, _xValue, _yValue, _zValue, millenia, (0.5));
               setState(() {
@@ -248,6 +247,12 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                   //14 millennia millennium 12
                 ),
                 */
+                Row(
+                  children: appalachianTrail(
+                      screenSize, _xValue, _yValue, _zValue, centuries, (2)),
+                  //10 centuries century per millennia millennium 12 * 10
+                ),
+
                 /*
                 Row(
                   children: timePeriodGenerator1(

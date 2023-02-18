@@ -7,7 +7,7 @@ randy(upper) {
 }
 
 timePeriod(totalAmount, screenSize, scaleFactor) {
-  print("amount of rectangles active");
+  print("amount of rectangles active / $totalAmount");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -16,7 +16,7 @@ timePeriod(totalAmount, screenSize, scaleFactor) {
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 255, randy(255), randy(255)),
+          color: Color.fromARGB(255, 200, randy(200), randy(200)),
         ),
       ),
     ),
@@ -25,7 +25,7 @@ timePeriod(totalAmount, screenSize, scaleFactor) {
 }
 
 filler(totalAmount, screenSize, scaleFactor) {
-  print("amount of filler active $totalAmount");
+  print("amount of filler active / $totalAmount");
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -43,8 +43,21 @@ filler(totalAmount, screenSize, scaleFactor) {
   return spaceTakerUpper;
 }
 
-checkNearby(xCoord, yCoord, zCoord) {
-  return "${xCoord.toStringAsFixed(0)}, ${yCoord.toStringAsFixed(0)}, ${zCoord.toStringAsFixed(0)}";
+fillerDos(width, screenSize, scaleFactor) {
+  Widget spaceTakerUpper = Padding(
+    padding: EdgeInsets.fromLTRB(
+        0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
+    child: SizedBox(
+      width: width,
+      height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+      ),
+    ),
+  );
+  return spaceTakerUpper;
 }
 
 appalachianTrail(
@@ -60,7 +73,7 @@ appalachianTrail(
   var roundY = yCoord.round();
   var roundZ = zCoord.round();
 
-  if (zCoord >= 12) {
+  if (zCoord > 12 && zCoord < 20) {
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -69,30 +82,62 @@ appalachianTrail(
         break;
       }
     }
-    //print(currentSegment);
+
+    // MILLENIA
     if (totalSegments < 100) {
       var displayedSegments = 0;
-      for (var i = 0; i < currentSegment - 2; i++) {
-        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
-      }
-      if (currentSegment == 12 || currentSegment == 1) {
+      if (currentSegment == 1 || currentSegment == totalSegments) {
         displayedSegments = 2;
       } else {
         displayedSegments = 3;
       }
+
+      for (var i = 0; i < currentSegment - 2; i++) {
+        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+      }
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
       }
-      //print("segments: total $totalSegments current $currentSegment");
       for (var i = 0; i < (totalSegments - currentSegment - 1); i++) {
         currentStack.add(filler(totalSegments, screenSize, scaleFactor));
       }
     }
 
-    //print(summedSegments);
-    // if (currentSegment) {
+    // CENTURIES
+    if (totalSegments > 100) {
+      var displayedSegments = 0;
+      var frontFiller = 0;
+      var backFiller = 0;
+      if (currentSegment >= totalSegments - 11) {
+        displayedSegments = totalSegments - currentSegment + 2;
+      } else if (currentSegment == 1) {
+        displayedSegments = 13;
+      } else {
+        displayedSegments = 14;
+      }
+      print("$currentSegment / $totalSegments");
 
-    // }
+      for (var i = 0; i < currentSegment - 2; i++) {
+        frontFiller++;
+        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+      }
+      //currentStack.add(filler(frontFiller, screenSize, scaleFactor));
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+      }
+      for (var i = 0; i < (totalSegments - currentSegment - 12); i++) {
+        backFiller++;
+        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+      }
+      //currentStack.add(filler(backFiller, screenSize, scaleFactor));
+
+      var rectangleWidth = (screenSize.width * zCoord) / totalSegments;
+      var frontFillerWidth = rectangleWidth * frontFiller;
+      var backFillerWidth = rectangleWidth * backFiller;
+      print("FILLER WIDTH front: $frontFillerWidth back: $backFillerWidth");
+    }
+  } else if (zCoord > 20) {
+    print("smol");
   } else {
     for (var i = 0; i < totalSegments; i++) {
       currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
