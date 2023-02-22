@@ -43,12 +43,12 @@ filler(totalAmount, screenSize, scaleFactor) {
   return spaceTakerUpper;
 }
 
-fillerDos(width, screenSize, scaleFactor) {
+fillerDos(totalAmount, fillerWidth, screenSize, scaleFactor) {
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
     child: SizedBox(
-      width: width,
+      width: (screenSize.width / totalAmount) * fillerWidth,
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: const BoxDecoration(
@@ -119,17 +119,20 @@ appalachianTrail(
 
       for (var i = 0; i < currentSegment - 2; i++) {
         frontFiller++;
-        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+        //currentStack.add(filler(totalSegments, screenSize, scaleFactor));
       }
-      //currentStack.add(filler(frontFiller, screenSize, scaleFactor));
+
+      print(frontFiller);
+      currentStack
+          .add(fillerDos(totalSegments, frontFiller, screenSize, scaleFactor));
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
       }
-      for (var i = 0; i < (totalSegments - currentSegment - 12); i++) {
-        backFiller++;
-        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
-      }
-      //currentStack.add(filler(backFiller, screenSize, scaleFactor));
+      // for (var i = 0; i < (totalSegments - currentSegment - 12); i++) {
+      //   backFiller++;
+      //   currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+      // }
+      //currentStack.add(fillerDos(backFiller, screenSize, scaleFactor));
 
       var rectangleWidth = (screenSize.width * zCoord) / totalSegments;
       var frontFillerWidth = rectangleWidth * frontFiller;
