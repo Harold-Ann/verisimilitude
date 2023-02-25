@@ -7,7 +7,6 @@ randy(upper) {
 }
 
 timePeriod(totalAmount, screenSize, scaleFactor) {
-  print("amount of rectangles active / $totalAmount");
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -25,7 +24,6 @@ timePeriod(totalAmount, screenSize, scaleFactor) {
 }
 
 filler(totalAmount, screenSize, scaleFactor) {
-  print("amount of filler active / $totalAmount");
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -65,13 +63,8 @@ appalachianTrail(
   List<Widget> currentStack = [];
   var entireLength = screenSize.width * zCoord;
   var singleSegment = entireLength / totalSegments;
-  //print("${singleSegment} single");
   var summedSegments = 0.0;
   var currentSegment = 0.0;
-  //print("${xCoord.abs()} Xcoord");
-  var roundX = xCoord.round();
-  var roundY = yCoord.round();
-  var roundZ = zCoord.round();
 
   if (zCoord > 12 && zCoord < 20) {
     for (var i = 0; i < totalSegments; i++) {
@@ -107,37 +100,37 @@ appalachianTrail(
     if (totalSegments > 100) {
       var displayedSegments = 0;
       var frontFiller = 0;
-      var backFiller = 0;
-      if (currentSegment >= totalSegments - 11) {
-        displayedSegments = totalSegments - currentSegment + 2;
-      } else if (currentSegment == 1) {
-        displayedSegments = 13;
+      // check whether the screen is at the right end and draws less rectangles
+      if (currentSegment >= totalSegments - 10) {
+        displayedSegments = totalSegments - currentSegment + 1;
       } else {
-        displayedSegments = 14;
+        displayedSegments = 11;
       }
-      print("$currentSegment / $totalSegments");
 
-      for (var i = 0; i < currentSegment - 2; i++) {
+      for (var i = 0; i < currentSegment - 1; i++) {
         frontFiller++;
-        //currentStack.add(filler(totalSegments, screenSize, scaleFactor));
       }
 
-      print(frontFiller);
       currentStack
           .add(fillerDos(totalSegments, frontFiller, screenSize, scaleFactor));
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
       }
-      // for (var i = 0; i < (totalSegments - currentSegment - 12); i++) {
-      //   backFiller++;
-      //   currentStack.add(filler(totalSegments, screenSize, scaleFactor));
-      // }
-      //currentStack.add(fillerDos(backFiller, screenSize, scaleFactor));
+    }
 
-      var rectangleWidth = (screenSize.width * zCoord) / totalSegments;
-      var frontFillerWidth = rectangleWidth * frontFiller;
-      var backFillerWidth = rectangleWidth * backFiller;
-      print("FILLER WIDTH front: $frontFillerWidth back: $backFillerWidth");
+    // DECADES
+    if (totalSegments > 1000) {
+      var displayedSegments = 0;
+      // check whether the screen is at the right end and draws less rectangles
+      if (currentSegment >= totalSegments - 110) {
+        displayedSegments = totalSegments - currentSegment - 10;
+      } else {
+        displayedSegments = 90;
+      }
+      // the actual rectangles on screen being drawn
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+      }
     }
   } else if (zCoord > 20) {
     print("smol");
