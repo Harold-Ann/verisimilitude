@@ -177,17 +177,17 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             child: Stack(
               children: [
                 Row(
-                  children: appalachianTrail(
+                  children: lazyLoad(
                       screenSize, _xValue, _yValue, _zValue, millenia, (0.5)),
                   //14 millennia millennium 12
                 ),
                 Row(
-                  children: appalachianTrail(
+                  children: lazyLoad(
                       screenSize, _xValue, _yValue, _zValue, centuries, (1)),
                   //10 centuries century per millennia millennium 12 * 10
                 ),
                 Row(
-                  children: appalachianTrail(
+                  children: lazyLoad(
                       screenSize, _xValue, _yValue, _zValue, decades, (2)),
                   //10 decades decade per centuries century 12 * 10 * 10
                 ),
@@ -232,7 +232,6 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             ),
           ),
         ),
-        Container(height: 500, width: 10, color: Colors.black)
       ],
     ));
   }

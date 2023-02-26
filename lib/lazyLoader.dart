@@ -6,7 +6,13 @@ randy(upper) {
   return randomNum.nextInt(upper);
 }
 
-timePeriod(totalAmount, screenSize, scaleFactor) {
+upOne() {
+  var R = 0;
+  var G = 0;
+  var B = 0;
+}
+
+drawRect(totalAmount, screenSize, scaleFactor) {
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -15,7 +21,7 @@ timePeriod(totalAmount, screenSize, scaleFactor) {
       height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 200, randy(200), randy(200)),
+          color: Color.fromARGB(255, randy(200), randy(200), randy(200)),
         ),
       ),
     ),
@@ -41,7 +47,7 @@ filler(totalAmount, screenSize, scaleFactor) {
   return spaceTakerUpper;
 }
 
-fillerDos(totalAmount, fillerWidth, screenSize, scaleFactor) {
+fillerRect(totalAmount, fillerWidth, screenSize, scaleFactor) {
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
         0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -58,8 +64,7 @@ fillerDos(totalAmount, fillerWidth, screenSize, scaleFactor) {
   return spaceTakerUpper;
 }
 
-appalachianTrail(
-    screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
+lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
   List<Widget> currentStack = [];
   var entireLength = screenSize.width * zCoord;
   var singleSegment = entireLength / totalSegments;
@@ -79,42 +84,40 @@ appalachianTrail(
     // MILLENIA
     if (totalSegments < 100) {
       var displayedSegments = 0;
-      if (currentSegment == 1 || currentSegment == totalSegments) {
-        displayedSegments = 2;
+      // check whether the screen is at the right end and draws less rectangles
+      if (currentSegment == totalSegments) {
+        displayedSegments = 1;
       } else {
-        displayedSegments = 3;
+        displayedSegments = 2;
       }
 
-      for (var i = 0; i < currentSegment - 2; i++) {
+      for (var i = 0; i < currentSegment - 1; i++) {
         currentStack.add(filler(totalSegments, screenSize, scaleFactor));
       }
       for (var i = 0; i < displayedSegments; i++) {
-        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
-      }
-      for (var i = 0; i < (totalSegments - currentSegment - 1); i++) {
-        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
     // CENTURIES
     if (totalSegments > 100) {
       var displayedSegments = 0;
-      var frontFiller = 0;
+      var fillerSize = 0;
       // check whether the screen is at the right end and draws less rectangles
       if (currentSegment >= totalSegments - 10) {
         displayedSegments = totalSegments - currentSegment + 1;
       } else {
         displayedSegments = 11;
       }
-
+      // filler rectangle that pushes rectangles into view
       for (var i = 0; i < currentSegment - 1; i++) {
-        frontFiller++;
+        fillerSize++;
       }
-
       currentStack
-          .add(fillerDos(totalSegments, frontFiller, screenSize, scaleFactor));
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+      // the actual rectangles on screen being drawn
       for (var i = 0; i < displayedSegments; i++) {
-        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
@@ -129,14 +132,14 @@ appalachianTrail(
       }
       // the actual rectangles on screen being drawn
       for (var i = 0; i < displayedSegments; i++) {
-        currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
   } else if (zCoord > 20) {
     print("smol");
   } else {
     for (var i = 0; i < totalSegments; i++) {
-      currentStack.add(timePeriod(totalSegments, screenSize, scaleFactor));
+      currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
     }
   }
   return currentStack;
