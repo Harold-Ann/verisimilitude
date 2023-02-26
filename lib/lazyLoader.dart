@@ -6,12 +6,6 @@ randy(upper) {
   return randomNum.nextInt(upper);
 }
 
-upOne() {
-  var R = 0;
-  var G = 0;
-  var B = 0;
-}
-
 drawRect(totalAmount, screenSize, scaleFactor) {
   Widget timePeriod = Padding(
     padding: EdgeInsets.fromLTRB(
@@ -27,24 +21,6 @@ drawRect(totalAmount, screenSize, scaleFactor) {
     ),
   );
   return timePeriod;
-}
-
-filler(totalAmount, screenSize, scaleFactor) {
-  Widget spaceTakerUpper = Padding(
-    padding: EdgeInsets.fromLTRB(
-        0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
-    child: SizedBox(
-      width: screenSize.width / totalAmount,
-      //width: screenSize.width - (screenSize.width / totalAmount) - 1,
-      height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-      ),
-    ),
-  );
-  return spaceTakerUpper;
 }
 
 fillerRect(totalAmount, fillerWidth, screenSize, scaleFactor) {
@@ -70,8 +46,17 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
   var singleSegment = entireLength / totalSegments;
   var summedSegments = 0.0;
   var currentSegment = 0.0;
+  var onScreenSegments = (screenSize.width / singleSegment).round() + 1;
 
-  if (zCoord > 12 && zCoord < 20) {
+  var millenia = 12;
+  late var centuries = millenia * 10;
+  late var decades = centuries * 10;
+  late var years = decades * 10;
+  late var months = years * 12;
+
+  // calculations
+
+  if (zCoord > 0 && zCoord < 7) {
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -82,57 +67,69 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
     }
 
     // MILLENIA
-    if (totalSegments < 100) {
+    if (totalSegments == millenia) {
       var displayedSegments = 0;
-      // check whether the screen is at the right end and draws less rectangles
-      if (currentSegment == totalSegments) {
-        displayedSegments = 1;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
       } else {
-        displayedSegments = 2;
+        displayedSegments = onScreenSegments + 1;
       }
 
       for (var i = 0; i < currentSegment - 1; i++) {
-        currentStack.add(filler(totalSegments, screenSize, scaleFactor));
+        fillerSize++;
       }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
     // CENTURIES
-    if (totalSegments > 100) {
+    if (totalSegments == centuries) {
       var displayedSegments = 0;
       var fillerSize = 0;
-      // check whether the screen is at the right end and draws less rectangles
-      if (currentSegment >= totalSegments - 10) {
+
+      if (currentSegment + onScreenSegments > totalSegments) {
         displayedSegments = totalSegments - currentSegment + 1;
       } else {
-        displayedSegments = 11;
+        displayedSegments = onScreenSegments;
       }
-      // filler rectangle that pushes rectangles into view
+
       for (var i = 0; i < currentSegment - 1; i++) {
         fillerSize++;
       }
       currentStack
           .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
-      // the actual rectangles on screen being drawn
+
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
     // DECADES
-    if (totalSegments > 1000) {
+    if (totalSegments == decades) {
       var displayedSegments = 0;
-      // check whether the screen is at the right end and draws less rectangles
-      if (currentSegment >= totalSegments - 110) {
-        displayedSegments = totalSegments - currentSegment - 10;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = ((totalSegments - currentSegment + 1) / 2).round();
       } else {
-        displayedSegments = 90;
+        displayedSegments = (onScreenSegments / 2).round();
       }
-      // the actual rectangles on screen being drawn
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
       for (var i = 0; i < displayedSegments; i++) {
-        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+        currentStack.add(
+            drawRect((totalSegments / 2).round(), screenSize, scaleFactor));
       }
     }
   } else if (zCoord > 20) {

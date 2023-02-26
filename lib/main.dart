@@ -108,6 +108,10 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
       //     0,
       //     1);
 
+      // print("squeaky leaky");
+      // print("oogie boogie");
+      // print("toodle poodle");
+
       print("Go");
     });
   }
@@ -170,7 +174,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 // }
               });
             },
-            boundaryMargin: EdgeInsets.all(0),
+            boundaryMargin: const EdgeInsets.all(0),
             minScale: 0.1,
             maxScale: 3269017,
             transformationController: controller,
