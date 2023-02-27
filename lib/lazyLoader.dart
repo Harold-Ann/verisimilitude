@@ -355,16 +355,10 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
         displayedSegments = (onScreenSegments / 4).round();
       }
 
-      for (var i = 0; i < currentSegment - 1; i++) {
+      for (var i = 0; i < currentSegment - 2; i++) {
         fillerSize++;
       }
 
-      if (fillerSize % 4 == 3) {
-        fillerSize++;
-      } else if (fillerSize % 4 == 1) {
-        fillerSize += 3;
-      }
-      print(fillerSize);
       currentStack
           .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
 
@@ -373,7 +367,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
             drawRect((totalSegments / 4).round(), screenSize, scaleFactor));
       }
     }
-  } else if (zCoord > 200) {
+  } else if (zCoord > 200 && zCoord < 600) {
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
