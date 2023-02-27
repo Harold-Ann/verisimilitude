@@ -182,18 +182,28 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
               children: [
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, millenia, (0.5)),
-                  //14 millennia millennium 12
+                      screenSize, _xValue, _yValue, _zValue, millenia, (1)),
+                  //12 millennia millennium 12
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, centuries, (1)),
+                      screenSize, _xValue, _yValue, _zValue, centuries, (2)),
                   //10 centuries century per millennia millennium 12 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, decades, (2)),
+                      screenSize, _xValue, _yValue, _zValue, decades, (4)),
                   //10 decades decade per centuries century 12 * 10 * 10
+                ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, years, (8)),
+                  //10 years year per decades decade 12 * 10 * 10 * 10
+                ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, months, (16)),
+                  //12 months month per years year 12 * 10 * 10 * 10 * 12
                 ),
               ],
             ),
