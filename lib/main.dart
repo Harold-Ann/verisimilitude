@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'timeline.dart';
+import 'userInterface.dart';
 import 'lazyLoader.dart';
 
 void main() => runApp(const MyApp());
@@ -197,12 +197,12 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, years, (8)),
+                      screenSize, _xValue, _yValue, _zValue, years, (16)),
                   //10 years year per decades decade 12 * 10 * 10 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, months, (16)),
+                      screenSize, _xValue, _yValue, _zValue, months, (64)),
                   //12 months month per years year 12 * 10 * 10 * 10 * 12
                 ),
               ],
