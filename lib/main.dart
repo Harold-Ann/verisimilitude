@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'timeline.dart';
+import 'userInterface.dart';
+import 'lazyLoader.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,8 +38,14 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
   String roundedZ = "";
   String roundedX = "";
   String roundedY = "";
+  var millenia = 12;
+  late var centuries = millenia * 10;
+  late var decades = centuries * 10;
+  late var years = decades * 10;
+  late var months = years * 12;
   final controller = TransformationController();
   late AnimationController controllerReset;
+  late AnimationController controllerLeft;
   late AnimationController controllerNow;
   late AnimationController controllerNow1;
 
@@ -47,6 +54,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
   var matrix2 = Matrix4.identity();
   var matrix3 = Matrix4.identity();
+
+  var matrix5 = Matrix4.identity();
 
   var _currentMatrix = Matrix4.identity();
 
@@ -63,32 +72,47 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     controllerNow1 =
         AnimationController(vsync: this, duration: Duration(seconds: 1));
 
+    controllerLeft =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+
     controller.addListener(() {
-      print(controller.value.getMaxScaleOnAxis());
-      noodles();
-
-      matrix3 = Matrix4(
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          0,
-          0,
-          0,
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          0,
-          0,
-          0,
-          controller.value.getMaxScaleOnAxis(),
-          0,
-          /*-148072500*/ (1500 * controller.value.getMaxScaleOnAxis()),
-          -49308142,
-          0,
-          1);
-
-      _zValue = controller.value.getMaxScaleOnAxis();
       _currentMatrix = controller.value;
+      _zValue = controller.value.getMaxScaleOnAxis();
       _xValue = controller.value.row0[3];
       _yValue = controller.value.row1[3];
+
+      // moves the screen to the left 500
+      // matrix5 = controller.value;
+      // var newX = controller.value.row0[3] += 500;
+      // print(matrix5.row0[3]);
+      // print(newX);
+      // matrix5 = Matrix4(_zValue, 0, 0, 0, 0, _zValue, 0, 0, 0, 0, _zValue, 0,
+      //     newX, _yValue, 0, 1);
+      // print(matrix5.row0[3]);
+
+      // matrix3 = Matrix4(
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     0,
+      //     0,
+      //     0,
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     0,
+      //     0,
+      //     0,
+      //     controller.value.getMaxScaleOnAxis(),
+      //     0,
+      //     /*-148072500*/ (1500 * controller.value.getMaxScaleOnAxis()),
+      //     -49308142,
+      //     0,
+      //     1);
+
+      // print("squeaky leaky");
+      // print("oogie boogie");
+      // print("toodle poodle");
+
+      print("Go");
     });
   }
 
@@ -106,312 +130,80 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           width: double.infinity,
           height: double.infinity,
           child: InteractiveViewer(
-            onInteractionUpdate: (details) {
+            onInteractionEnd: (details) {
+              print("Stop");
               setState(() {
-                if (kIsWeb) {
-                  var matrix2 = Matrix4(
-                      _zValue,
-                      0,
-                      0,
-                      0,
-                      0,
-                      _zValue,
-                      0,
-                      0,
-                      0,
-                      0,
-                      _zValue,
-                      0,
-                      /*-148072500*/ screenSize.width * _zValue,
-                      -49308142,
-                      0,
-                      1);
+                roundedZ = _zValue.toStringAsFixed(1);
+                roundedX = (_xValue.abs()).toStringAsFixed(0);
+                roundedY = (_yValue.abs()).toStringAsFixed(0);
 
-                  if (_zValue < 1) {
-                    _zValue = 1;
-                  }
-                  if (_zValue > 98716) {
-                    _zValue = 98716;
-                  }
+                //draw(_xValue, _yValue);
+                //if (kIsWeb) {
+                /*
+                var matrix2 = Matrix4(
+                    _zValue,
+                    0,
+                    0,
+                    0,
+                    0,
+                    _zValue,
+                    0,
+                    0,
+                    0,
+                    0,
+                    _zValue,
+                    0,
+                    /*-148072500*/ screenSize.width * _zValue,
+                    -49308142,
+                    0,
+                    1);
+                */
+                //if (_zValue < 1) {
+                //  _zValue = 1;
+                //}
+                //if (_zValue > 98716) {
+                //  _zValue = 98716;
+                //}
 
-                  roundedZ = _zValue.toStringAsFixed(0);
-                  roundedX = (_xValue.abs()).toStringAsFixed(0);
-                  roundedY = (_yValue.abs()).toStringAsFixed(0);
-                } else {
-                  if (Platform.isAndroid) {
-                    // Android-specific code
-                  } else if (Platform.isIOS) {
-                    // iOS-specific code
-                  }
-                }
+                // } else {
+                //   if (Platform.isAndroid) {
+                //     // Android-specific code
+                //   } else if (Platform.isIOS) {
+                //     // iOS-specific code
+                //   }
+                // }
               });
             },
-            boundaryMargin: EdgeInsets.all(0),
+            boundaryMargin: const EdgeInsets.all(0),
             minScale: 0.1,
             maxScale: 3269017,
             transformationController: controller,
             child: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 * 4), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 * 8,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 208, 158, 255),
-                      ),
-                    ),
-                  ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, millenia, (1)),
+                  //12 millennia millennium 12
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 * 2), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 * 4,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 0, 3, 155),
-                      ),
-                    ),
-                  ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, centuries, (2)),
+                  //10 centuries century per millennia millennium 12 * 10
                 ),
-                potato,
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, (((screenSize.height) / 2) - (100 / 2)), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, decades, (4)),
+                  //10 decades decade per centuries century 12 * 10 * 10
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 4), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.lightBlue,
-                      ),
-                    ),
-                  ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, years, (16)),
+                  //10 years year per decades decade 12 * 10 * 10 * 10
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 8), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 4,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 16), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 8,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.yellow,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 32), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 16,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.purple,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 64), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 32,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 50, 21, 216),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 128), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 64,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 0, 0, 0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 256), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 128,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 204, 176, 14),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 512), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 256,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 81, 5),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 1024), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 512,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 26, 210, 235),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 2048), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 1024,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 95, 5, 212),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 4096), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 2048,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 15, 58, 19),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 8192), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 4096,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 5, 40),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 16384), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 8192,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 195, 5, 212),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 32768), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 16384,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 212, 208, 5),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 65536), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 32768,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 0, 88, 160),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 131072), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 65536,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 27, 160, 0),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      0, ((screenSize.height) / 2) - (100 / 262144), 0, 0),
-                  child: SizedBox(
-                    width: screenSize.width,
-                    height: 100 / 131072,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 255, 123, 35),
-                      ),
-                    ),
-                  ),
+                Row(
+                  children: lazyLoad(
+                      screenSize, _xValue, _yValue, _zValue, months, (64)),
+                  //12 months month per years year 12 * 10 * 10 * 10 * 12
                 ),
               ],
             ),
@@ -434,7 +226,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                       IconButton(
                           onPressed: now, icon: const Icon(Icons.architecture)),
                       IconButton(
-                          onPressed: now1, icon: const Icon(Icons.gamepad)),
+                          onPressed: () => moveLeft(_xValue),
+                          icon: const Icon(Icons.gamepad)),
                     ],
                   ),
                 ),
@@ -453,7 +246,6 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             ),
           ),
         ),
-        Container(height: 500, width: 10, color: Colors.black)
       ],
     ));
   }
@@ -470,31 +262,20 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
     controllerNow.reset();
     controllerNow.fling();
-
-    print("now Z value: $_zValue");
-    // setState(() {
-    //   controller.value = Matrix4.identity();
-    // });
   }
 
-  void now1() {
-    final animationNow1 = Matrix4Tween(
+  moveLeft(xVal) {
+    final animationLeft = Matrix4Tween(
       begin: controller.value,
-      end: matrix2,
-    ).animate(controllerNow1);
+      end: matrix5,
+    ).animate(controllerLeft);
 
-    animationNow1.addListener(() {
-      controller.value = animationNow1.value;
+    animationLeft.addListener(() {
+      controller.value = animationLeft.value;
     });
 
-    controllerNow1.reset();
-    controllerNow1.fling();
-
-    //print(_currentMatrix);
-    print("now1 Z value: $_zValue");
-    // setState(() {
-    //   controller.value = Matrix4.identity();
-    // });
+    controllerLeft.reset();
+    controllerLeft.fling();
   }
 
   void reset() {
@@ -509,8 +290,5 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
     controllerReset.reset();
     controllerReset.fling();
-    // setState(() {
-    //   controller.value = Matrix4.identity();
-    // });
   }
 }
