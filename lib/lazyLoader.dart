@@ -54,10 +54,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
   late var years = decades * 10;
   late var months = years * 12;
 
-  // calculations
-
-  // CHANGE ZOOM LEVEL 7.4 FROM 5 DECADES PER CENTURY TO 10 DECADES PER CENTURY. ONLY 7.4 THO
-  // ALSO MAKE SMALLER ZOOM LEVELS VERTICALLY SHORTER SO MORE CAN FIT ON SCREEN.
   if (zCoord > 0 && zCoord < 2) {
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
