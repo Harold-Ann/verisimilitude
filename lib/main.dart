@@ -191,22 +191,22 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, centuries, (2)),
+                      screenSize, _xValue, _yValue, _zValue, centuries, (4)),
                   //10 centuries century per millennia millennium 12 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, decades, (4)),
+                      screenSize, _xValue, _yValue, _zValue, decades, (16)),
                   //10 decades decade per centuries century 12 * 10 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, years, (16)),
+                      screenSize, _xValue, _yValue, _zValue, years, (64)),
                   //10 years year per decades decade 12 * 10 * 10 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, months, (64)),
+                      screenSize, _xValue, _yValue, _zValue, months, (256)),
                   //12 months month per years year 12 * 10 * 10 * 10 * 12
                 ),
               ],
@@ -214,7 +214,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           ),
         ),
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomLeft,
           child: Container(
             padding: EdgeInsets.all(16),
             color: Colors.white,
@@ -250,7 +250,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             ),
           ),
         ),
-        timescaleDisplay(),
+        timescaleDisplay(screenSize, _zValue),
       ],
     ));
   }

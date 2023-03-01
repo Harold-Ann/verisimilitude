@@ -60,7 +60,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
   late var months = years * 12;
 
   if (zCoord > 0 && zCoord < 2) {
-    getSegmentType(screenSize, zCoord, millenia);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -114,7 +113,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 2 && zCoord < 7) {
-    getSegmentType(screenSize, zCoord, centuries);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -195,7 +193,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 7 && zCoord < 10) {
-    getSegmentType(screenSize, zCoord, centuries);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -272,13 +269,34 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 10 && zCoord < 50) {
-    getSegmentType(screenSize, zCoord, centuries);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
       if (summedSegments - screenSize.width >
           (xCoord.abs() - screenSize.width)) {
         break;
+      }
+    }
+
+    // MILLENIA
+    if (totalSegments == millenia) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
@@ -353,13 +371,34 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 50 && zCoord < 90) {
-    getSegmentType(screenSize, zCoord, decades);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
       if (summedSegments - screenSize.width >
           (xCoord.abs() - screenSize.width)) {
         break;
+      }
+    }
+
+    // CENTURIES
+    if (totalSegments == centuries) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
@@ -407,7 +446,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 90 && zCoord < 200) {
-    getSegmentType(screenSize, zCoord, years);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
@@ -425,7 +463,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       if (currentSegment + onScreenSegments > totalSegments) {
         displayedSegments = totalSegments - currentSegment + 1;
       } else {
-        displayedSegments = onScreenSegments;
+        displayedSegments = onScreenSegments + 1;
       }
 
       for (var i = 0; i < currentSegment - 1; i++) {
@@ -484,13 +522,34 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 200 && zCoord < 600) {
-    getSegmentType(screenSize, zCoord, years);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
       if (summedSegments - screenSize.width >
           (xCoord.abs() - screenSize.width)) {
         break;
+      }
+    }
+
+    // DECADES
+    if (totalSegments == decades) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 
@@ -543,7 +602,6 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
   } else if (zCoord > 600) {
-    getSegmentType(screenSize, zCoord, months);
     for (var i = 0; i < totalSegments; i++) {
       summedSegments += singleSegment;
       currentSegment += 1;
