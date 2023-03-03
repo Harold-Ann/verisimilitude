@@ -5,6 +5,7 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'userInterface.dart';
 import 'lazyLoader.dart';
+import 'navigatorDisplay.dart';
 
 void main() => runApp(const MyApp());
 
@@ -217,23 +218,25 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           alignment: Alignment.bottomLeft,
           child: Container(
             padding: EdgeInsets.all(16),
-            color: Colors.white,
+            decoration: BoxDecoration(
+              border:
+                  Border.all(width: 1.0, color: Color.fromARGB(255, 0, 0, 0)),
+              color: Colors.white,
+            ),
             width: 800,
-            height: 152,
+            height: 154,
             child: Row(
               children: [
-                Container(
-                  child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: reset, icon: const Icon(Icons.business)),
-                      IconButton(
-                          onPressed: now, icon: const Icon(Icons.architecture)),
-                      IconButton(
-                          onPressed: () => moveLeft(_xValue),
-                          icon: const Icon(Icons.gamepad)),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    IconButton(
+                        onPressed: reset, icon: const Icon(Icons.business)),
+                    IconButton(
+                        onPressed: now, icon: const Icon(Icons.architecture)),
+                    IconButton(
+                        onPressed: () => moveLeft(_xValue),
+                        icon: const Icon(Icons.gamepad)),
+                  ],
                 ),
                 Text(
                   "Screen Size: ${screenSize.width}x${screenSize.height}\nCurrent Zoom: $roundedZ \nCoordinates:\nX:$roundedX Y: $roundedY",
@@ -251,6 +254,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           ),
         ),
         timescaleDisplay(screenSize, _zValue),
+        navigatorDisplay(screenSize, _xValue, _yValue, _zValue)
       ],
     ));
   }

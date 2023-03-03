@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'lazyLoader.dart';
 
 timescaleDisplay(screenSize, zCoord) {
   var millenia = 12;
@@ -84,10 +83,13 @@ timescaleDisplay(screenSize, zCoord) {
     alignment: Alignment.bottomRight,
     child: SizedBox(
       width: 500,
-      height: 50,
+      height: 51,
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
+        decoration: const BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Colors.black),
+            left: BorderSide(color: Colors.black),
+          ),
           color: Colors.white,
         ),
         child: Column(
@@ -101,7 +103,7 @@ timescaleDisplay(screenSize, zCoord) {
                       color: Colors.teal,
                     ),
                     width: smallSegment,
-                    height: 24,
+                    height: 25,
                   ),
                 ),
                 Align(
@@ -121,7 +123,7 @@ timescaleDisplay(screenSize, zCoord) {
                       color: Colors.purple,
                     ),
                     width: largeSegment,
-                    height: 24,
+                    height: 25,
                   ),
                 ),
                 Align(
