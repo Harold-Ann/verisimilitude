@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'userInterface.dart';
+import 'user_interface.dart';
 import 'main.dart';
 import 'dart:math';
 

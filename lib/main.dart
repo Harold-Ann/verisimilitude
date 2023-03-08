@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'userInterface.dart';
-import 'lazyLoader.dart';
-import 'navigatorDisplay.dart';
+import 'user_interface.dart';
+import 'lazy_loader.dart';
+import 'navigator_display.dart';
 
 void main() => runApp(const MyApp());
 
