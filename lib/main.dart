@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'user_interface.dart';
+import 'scale_display.dart';
 import 'lazy_loader.dart';
 import 'navigator_display.dart';
 

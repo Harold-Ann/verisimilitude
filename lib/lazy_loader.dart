@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'user_interface.dart';
-import 'main.dart';
 import 'dart:math';
+import 'navigator_display.dart';
 
 randy(upper) {
   var randomNum = Random();
@@ -222,6 +221,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      //displays 4 segments, could be 3
     }
 
     // CENTURIES
@@ -298,6 +298,8 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      //print(currentSegment);
+      setTheVar(currentSegment);
     }
 
     // CENTURIES

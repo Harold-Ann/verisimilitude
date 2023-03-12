@@ -7,6 +7,11 @@ var decades = centuries * 10;
 var years = decades * 10;
 var months = years * 12;
 
+var currentSegmentVariable = 0;
+setTheVar(variableSet) {
+  currentSegmentVariable = variableSet;
+}
+
 drawNavRect(screenSize, totalAmount) {
   Widget navigationRectangle = SizedBox(
     width: screenSize.width / totalAmount,
@@ -34,11 +39,24 @@ groupNavRects(screenSize, zCoord) {
   return rectangleStack;
 }
 
-drawTextDisplay(screenSize, totalAmount, num2) {
-  num2 -= 10;
-  num2 *= 1000;
+drawTextDisplay(screenSize, zCoord, totalAmount, year) {
+  if (zCoord > 0 && zCoord < 12) {
+    year -= 10;
+    year *= 1000;
+  } else if (zCoord > 12 && zCoord < 100) {
+    year -= 10;
+    year /= 10;
+    year -= currentSegmentVariable;
+    year *= 1000;
+    year += 1000;
+    if (year > currentSegmentVariable * -1000 + 1000) {
+      year += 900;
+    }
+    if (year <= currentSegmentVariable * -1000) {}
+  }
+
   Widget navigationText =
-      SizedBox(width: screenSize.width / 12, child: Text("$num2"));
+      SizedBox(width: screenSize.width / 12, child: Text("${year}s"));
   return navigationText;
 }
 
@@ -46,11 +64,11 @@ groupTextDisplay(screenSize, zCoord) {
   List<Widget> textStack = [];
   if (zCoord > 0 && zCoord < 12) {
     for (var i = 0; i < 12; i++) {
-      textStack.add(drawTextDisplay(screenSize, 12, i));
+      textStack.add(drawTextDisplay(screenSize, zCoord, 12, i));
     }
   } else if (zCoord > 12 && zCoord < 100) {
     for (var i = 0; i < 12; i++) {
-      textStack.add(drawTextDisplay(screenSize, 12, i));
+      textStack.add(drawTextDisplay(screenSize, zCoord, 12, i));
     }
   }
   return textStack;
