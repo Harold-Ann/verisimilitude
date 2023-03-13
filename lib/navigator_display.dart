@@ -39,6 +39,9 @@ groupNavRects(screenSize, zCoord) {
   return rectangleStack;
 }
 
+// change to 10 total rectangles when zoomed into centuries/decades
+// put buttons under each side in order to skip 100, 10, 1 years etc
+
 drawTextDisplay(screenSize, zCoord, totalAmount, year) {
   if (zCoord > 0 && zCoord < 12) {
     year -= 10;
@@ -46,10 +49,10 @@ drawTextDisplay(screenSize, zCoord, totalAmount, year) {
   } else if (zCoord > 12 && zCoord < 100) {
     year -= 10;
     year /= 10;
-    year -= currentSegmentVariable;
+    year -= 10 - currentSegmentVariable;
     year *= 1000;
-    year += 1000;
-    if (year > currentSegmentVariable * -1000 + 1000) {
+    year -= 1000;
+    if (year > currentSegmentVariable * -1000 - 1000) {
       year += 900;
     }
     if (year <= currentSegmentVariable * -1000) {}
