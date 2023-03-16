@@ -12,6 +12,7 @@ setTheVar(variableSet) {
   currentSegmentVariable = variableSet;
 }
 
+// displays the rectangles/background in nav bar
 drawNavRect(screenSize, totalAmount) {
   Widget navigationRectangle = SizedBox(
     width: screenSize.width / totalAmount,
@@ -32,8 +33,8 @@ groupNavRects(screenSize, zCoord) {
       rectangleStack.add(drawNavRect(screenSize, 12));
     }
   } else if (zCoord > 12 && zCoord < 100) {
-    for (var i = 0; i < 12; i++) {
-      rectangleStack.add(drawNavRect(screenSize, 12));
+    for (var i = 0; i < 10; i++) {
+      rectangleStack.add(drawNavRect(screenSize, 10));
     }
   }
   return rectangleStack;
@@ -42,6 +43,7 @@ groupNavRects(screenSize, zCoord) {
 // change to 10 total rectangles when zoomed into centuries/decades
 // put buttons under each side in order to skip 100, 10, 1 years etc
 
+// displays the text in nav bar
 drawTextDisplay(screenSize, zCoord, totalAmount, year) {
   if (zCoord > 0 && zCoord < 12) {
     year -= 10;
@@ -51,15 +53,12 @@ drawTextDisplay(screenSize, zCoord, totalAmount, year) {
     year /= 10;
     year -= 10 - currentSegmentVariable;
     year *= 1000;
-    year -= 1000;
-    if (year > currentSegmentVariable * -1000 - 1000) {
-      year += 900;
-    }
+    if (year > currentSegmentVariable * -1000 - 1000) {}
     if (year <= currentSegmentVariable * -1000) {}
   }
 
   Widget navigationText =
-      SizedBox(width: screenSize.width / 12, child: Text("${year}s"));
+      SizedBox(width: screenSize.width / totalAmount, child: Text("$year"));
   return navigationText;
 }
 
@@ -70,51 +69,92 @@ groupTextDisplay(screenSize, zCoord) {
       textStack.add(drawTextDisplay(screenSize, zCoord, 12, i));
     }
   } else if (zCoord > 12 && zCoord < 100) {
-    for (var i = 0; i < 12; i++) {
-      textStack.add(drawTextDisplay(screenSize, zCoord, 12, i));
+    for (var i = 0; i < 10; i++) {
+      textStack.add(drawTextDisplay(screenSize, zCoord, 10, i));
     }
   }
   return textStack;
 }
 
+// fillers for position identifier
 drawFillerX(screenSize, xCoord, yCoord, zCoord) {
+  var localWidth = 0.0;
+  if (zCoord > 0 && zCoord < 12) {
+    localWidth = (xCoord.abs() / zCoord);
+    print("$localWidth X regular");
+  } else if (zCoord > 12 && zCoord < 100) {
+    localWidth = (xCoord.abs() / (zCoord / 12));
+    print("$localWidth X zoom");
+  }
   Widget fillerX = SizedBox(
-    width: (xCoord.abs() / zCoord),
+    width: localWidth,
     height: 100,
     //height: (screenSize.height / zCoord) / 10
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(0, 0, 0, 0)),
+      decoration: BoxDecoration(color: Color.fromARGB(255, 6, 5, 110)),
     ),
   );
   return fillerX;
 }
 
 drawFillerY(screenSize, xCoord, yCoord, zCoord) {
+  var localWidth = 0.0;
+  if (zCoord > 0 && zCoord < 12) {
+    localWidth = screenSize.width - ((xCoord).abs() / zCoord);
+    print("$localWidth Y regular");
+  } else if (zCoord > 12 && zCoord < 100) {
+    localWidth = screenSize.width - ((xCoord).abs() / (zCoord * 12));
+    print("$localWidth Y zoom");
+  }
   Widget fillerY = SizedBox(
-    width: screenSize.width - ((xCoord).abs() / zCoord),
+    width: localWidth,
     height: (((screenSize.height / 10) / 2) -
         (((screenSize.height / zCoord) / 100)) / 2),
     //height: ((yCoord.abs() / zCoord) + ((yCoord.abs() / zCoord) / 10)) / 10,
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(0, 0, 0, 0)),
+      decoration: BoxDecoration(color: Color.fromARGB(255, 226, 213, 32)),
     ),
   );
   return fillerY;
 }
 
+// position identifier (black box in nav bar)
 positionIdentifier(screenSize, xCoord, yCoord, zCoord) {
+  var localWidth = 0.0;
+  if (zCoord > 0 && zCoord < 12) {
+    localWidth = (screenSize.width / zCoord) - 1;
+    print("$localWidth pos regular");
+  } else if (zCoord > 12 && zCoord < 100) {
+    localWidth = ((screenSize.width / zCoord) * 12) - 1;
+    print("$localWidth pos zoom");
+  }
   Widget positionDisplay = Container(
     decoration: BoxDecoration(
       border: Border.all(color: Colors.black),
       color: Color.fromARGB(50, 0, 0, 0),
     ),
-    width: (screenSize.width / zCoord) - 1,
+    width: localWidth,
     height: (screenSize.height / zCoord) / 100,
   );
   return positionDisplay;
 }
 
+// actual display widget
 navigatorDisplay(screenSize, xCoord, yCoord, zCoord) {
+  var localWidth = 0.0;
+  if (zCoord > 0 && zCoord < 12) {
+    localWidth = screenSize.width -
+        ((screenSize.width / zCoord)) -
+        ((xCoord).abs() / zCoord) +
+        1;
+    print("$localWidth end regular");
+  } else if (zCoord > 12 && zCoord < 100) {
+    localWidth = screenSize.width -
+        ((screenSize.width / zCoord) / 12) -
+        ((xCoord).abs() / (zCoord / 12)) +
+        1;
+    print("$localWidth end zoom");
+  }
   Widget navigatorDisplay = Align(
     alignment: Alignment.topCenter,
     child: Container(
@@ -147,11 +187,8 @@ navigatorDisplay(screenSize, xCoord, yCoord, zCoord) {
                               screenSize, xCoord, yCoord, zCoord),
                         ),
                         Container(
-                          color: Color.fromARGB(0, 0, 0, 0),
-                          width: screenSize.width -
-                              ((screenSize.width / zCoord)) -
-                              ((xCoord).abs() / zCoord) +
-                              1,
+                          color: Color.fromARGB(255, 177, 16, 16),
+                          width: localWidth,
                           height: (screenSize.height / zCoord) / 100,
                         )
                       ],
