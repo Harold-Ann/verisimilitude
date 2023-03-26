@@ -457,6 +457,28 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
 
+    // CENTURIES
+    if (totalSegments == centuries) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+      }
+    }
+
     // DECADES
     if (totalSegments == decades) {
       var displayedSegments = 0;

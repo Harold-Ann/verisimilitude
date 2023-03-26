@@ -91,7 +91,7 @@ drawFillerX(screenSize, xCoord, yCoord, zCoord) {
     height: 100,
     //height: (screenSize.height / zCoord) / 10
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(255, 6, 5, 110)),
+      decoration: BoxDecoration(color: Color.fromARGB(100, 6, 5, 110)),
     ),
   );
   return fillerX;
@@ -100,10 +100,12 @@ drawFillerX(screenSize, xCoord, yCoord, zCoord) {
 drawFillerY(screenSize, xCoord, yCoord, zCoord) {
   var localWidth = 0.0;
   if (zCoord > 0 && zCoord < 12) {
-    localWidth = screenSize.width - ((xCoord).abs() / zCoord);
+    localWidth = screenSize.width -
+        (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
     print("$localWidth Y regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = screenSize.width - ((xCoord).abs() / (zCoord * 12));
+    localWidth = screenSize.width -
+        (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
     print("$localWidth Y zoom");
   }
   Widget fillerY = SizedBox(
@@ -112,7 +114,7 @@ drawFillerY(screenSize, xCoord, yCoord, zCoord) {
         (((screenSize.height / zCoord) / 100)) / 2),
     //height: ((yCoord.abs() / zCoord) + ((yCoord.abs() / zCoord) / 10)) / 10,
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(255, 226, 213, 32)),
+      decoration: BoxDecoration(color: Color.fromARGB(100, 226, 213, 32)),
     ),
   );
   return fillerY;
@@ -125,17 +127,22 @@ positionIdentifier(screenSize, xCoord, yCoord, zCoord) {
     localWidth = (screenSize.width / zCoord) - 1;
     print("$localWidth pos regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = ((screenSize.width / zCoord) * 12) - 1;
+    localWidth = ((screenSize.width / zCoord) * 12);
+    if (localWidth + drawFillerX(screenSize, xCoord, yCoord, zCoord).width >
+        screenSize.width) {
+      localWidth -= drawFillerX(screenSize, xCoord, yCoord, zCoord).width - 22;
+    }
     print("$localWidth pos zoom");
   }
-  Widget positionDisplay = Container(
-    decoration: BoxDecoration(
-      border: Border.all(color: Colors.black),
-      color: Color.fromARGB(50, 0, 0, 0),
-    ),
-    width: localWidth,
-    height: (screenSize.height / zCoord) / 100,
-  );
+  Widget positionDisplay = SizedBox(
+      width: localWidth,
+      height: (screenSize.height / zCoord) / 100,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black),
+          color: Color.fromARGB(50, 0, 0, 0),
+        ),
+      ));
   return positionDisplay;
 }
 
@@ -144,15 +151,17 @@ navigatorDisplay(screenSize, xCoord, yCoord, zCoord) {
   var localWidth = 0.0;
   if (zCoord > 0 && zCoord < 12) {
     localWidth = screenSize.width -
-        ((screenSize.width / zCoord)) -
-        ((xCoord).abs() / zCoord) +
-        1;
+        (positionIdentifier(screenSize, xCoord, yCoord, zCoord).width) -
+        (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
     print("$localWidth end regular");
   } else if (zCoord > 12 && zCoord < 100) {
     localWidth = screenSize.width -
-        ((screenSize.width / zCoord) / 12) -
-        ((xCoord).abs() / (zCoord / 12)) +
-        1;
+        positionIdentifier(screenSize, xCoord, yCoord, zCoord).width -
+        (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
+    /*screenSize.width -
+        (screenSize.width -
+            ((screenSize.width / zCoord)) -
+            ((xCoord).abs() / (zCoord)));*/
     print("$localWidth end zoom");
   }
   Widget navigatorDisplay = Align(
