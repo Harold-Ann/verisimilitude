@@ -299,7 +299,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
       //print(currentSegment);
-      setTheVar(currentSegment);
+      currentMilleniaSet(currentSegment);
     }
 
     // CENTURIES
@@ -322,6 +322,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      currentCenturySet(currentSegment);
     }
 
     // DECADES
@@ -402,6 +403,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      currentCenturySet(currentSegment);
     }
 
     // DECADES
@@ -477,6 +479,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      currentCenturySet(currentSegment);
     }
 
     // DECADES

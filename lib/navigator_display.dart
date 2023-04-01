@@ -7,9 +7,14 @@ var decades = centuries * 10;
 var years = decades * 10;
 var months = years * 12;
 
-var currentSegmentVariable = 0;
-setTheVar(variableSet) {
-  currentSegmentVariable = variableSet;
+var currentMillenium = 0;
+var currentCentury = 0;
+currentMilleniaSet(variable) {
+  currentMillenium = variable;
+}
+
+currentCenturySet(variable) {
+  currentCentury = variable;
 }
 
 // displays the rectangles/background in nav bar
@@ -51,10 +56,9 @@ drawTextDisplay(screenSize, zCoord, totalAmount, year) {
   } else if (zCoord > 12 && zCoord < 100) {
     year -= 10;
     year /= 10;
-    year -= 10 - currentSegmentVariable;
+    year -= 9;
     year *= 1000;
-    if (year > currentSegmentVariable * -1000 - 1000) {}
-    if (year <= currentSegmentVariable * -1000) {}
+    year += (100 * (currentCentury - 1));
   }
 
   Widget navigationText =
@@ -78,43 +82,44 @@ groupTextDisplay(screenSize, zCoord) {
 
 // fillers for position identifier
 drawFillerX(screenSize, xCoord, yCoord, zCoord) {
-  var localWidth = 0.0;
+  var localWidthX = 0.0;
   if (zCoord > 0 && zCoord < 12) {
-    localWidth = (xCoord.abs() / zCoord);
-    print("$localWidth X regular");
+    localWidthX = (xCoord.abs() / zCoord);
+    //print("$localWidthX X regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = (xCoord.abs() / (zCoord / 12));
-    print("$localWidth X zoom");
+    localWidthX = (xCoord.abs() / (zCoord / 12)) -
+        ((screenSize.width / 10) * (currentCentury - 1));
+    //print("$localWidthX X zoom");
   }
   Widget fillerX = SizedBox(
-    width: localWidth,
+    width: localWidthX,
     height: 100,
     //height: (screenSize.height / zCoord) / 10
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(100, 6, 5, 110)),
+      decoration: BoxDecoration(color: Color.fromARGB(0, 6, 5, 110)),
     ),
   );
   return fillerX;
 }
 
 drawFillerY(screenSize, xCoord, yCoord, zCoord) {
-  var localWidth = 0.0;
+  var localWidthY = 0.0;
   if (zCoord > 0 && zCoord < 12) {
-    localWidth = screenSize.width -
+    localWidthY = screenSize.width -
         (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
-    print("$localWidth Y regular");
+    //print("$localWidthY Y regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = screenSize.width -
+    localWidthY = screenSize.width -
         (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
-    print("$localWidth Y zoom");
+    //print("$localWidthY Y zoom");
   }
   Widget fillerY = SizedBox(
-    width: localWidth,
+    width: localWidthY,
     height: (((screenSize.height / 10) / 2) -
         (((screenSize.height / zCoord) / 100)) / 2),
     //height: ((yCoord.abs() / zCoord) + ((yCoord.abs() / zCoord) / 10)) / 10,
     child: Container(
-      decoration: BoxDecoration(color: Color.fromARGB(100, 226, 213, 32)),
+      decoration: BoxDecoration(color: Color.fromARGB(0, 226, 213, 32)),
     ),
   );
   return fillerY;
@@ -122,25 +127,25 @@ drawFillerY(screenSize, xCoord, yCoord, zCoord) {
 
 // position identifier (black box in nav bar)
 positionIdentifier(screenSize, xCoord, yCoord, zCoord) {
-  var localWidth = 0.0;
+  var localWidthP = 0.0;
   if (zCoord > 0 && zCoord < 12) {
-    localWidth = (screenSize.width / zCoord) - 1;
-    print("$localWidth pos regular");
+    localWidthP = (screenSize.width / zCoord) - 1;
+    //print("$localWidthP pos regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = ((screenSize.width / zCoord) * 12);
-    if (localWidth + drawFillerX(screenSize, xCoord, yCoord, zCoord).width >
+    localWidthP = ((screenSize.width / zCoord) * 12);
+    if (localWidthP + drawFillerX(screenSize, xCoord, yCoord, zCoord).width >
         screenSize.width) {
-      localWidth -= drawFillerX(screenSize, xCoord, yCoord, zCoord).width - 22;
+      localWidthP -= drawFillerX(screenSize, xCoord, yCoord, zCoord).width - 22;
     }
-    print("$localWidth pos zoom");
+    //print("$localWidthP pos zoom");
   }
   Widget positionDisplay = SizedBox(
-      width: localWidth,
-      height: (screenSize.height / zCoord) / 100,
+      width: localWidthP,
+      height: 10,
+      //(screenSize.height / zCoord) / 100,
       child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black),
-          color: Color.fromARGB(50, 0, 0, 0),
+        decoration: const BoxDecoration(
+          color: Colors.black,
         ),
       ));
   return positionDisplay;
@@ -148,21 +153,17 @@ positionIdentifier(screenSize, xCoord, yCoord, zCoord) {
 
 // actual display widget
 navigatorDisplay(screenSize, xCoord, yCoord, zCoord) {
-  var localWidth = 0.0;
+  var localWidthE = 0.0;
   if (zCoord > 0 && zCoord < 12) {
-    localWidth = screenSize.width -
+    localWidthE = screenSize.width -
         (positionIdentifier(screenSize, xCoord, yCoord, zCoord).width) -
         (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
-    print("$localWidth end regular");
+    //print("$localWidthE end regular");
   } else if (zCoord > 12 && zCoord < 100) {
-    localWidth = screenSize.width -
+    localWidthE = screenSize.width -
         positionIdentifier(screenSize, xCoord, yCoord, zCoord).width -
         (drawFillerX(screenSize, xCoord, yCoord, zCoord).width);
-    /*screenSize.width -
-        (screenSize.width -
-            ((screenSize.width / zCoord)) -
-            ((xCoord).abs() / (zCoord)));*/
-    print("$localWidth end zoom");
+    //print("$localWidthE end zoom");
   }
   Widget navigatorDisplay = Align(
     alignment: Alignment.topCenter,
@@ -196,8 +197,8 @@ navigatorDisplay(screenSize, xCoord, yCoord, zCoord) {
                               screenSize, xCoord, yCoord, zCoord),
                         ),
                         Container(
-                          color: Color.fromARGB(255, 177, 16, 16),
-                          width: localWidth,
+                          color: Color.fromARGB(0, 177, 16, 16),
+                          width: localWidthE,
                           height: (screenSize.height / zCoord) / 100,
                         )
                       ],
