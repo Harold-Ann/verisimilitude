@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'navigator_display.dart';
 
 randy(upper) {
   var randomNum = Random();
   return randomNum.nextInt(upper);
 }
+
+// make functions that have one millenia, century, etc
+// call upon those functions below, can save a lot of space
 
 drawRect(totalAmount, screenSize, scaleFactor) {
   Widget timePeriod = Padding(
@@ -217,6 +221,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      //displays 4 segments, could be 3
     }
 
     // CENTURIES
@@ -273,6 +278,30 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
 
+    // MILLENIA
+    if (totalSegments == millenia) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+      }
+      //print(currentSegment);
+      currentMilleniaSet(currentSegment);
+    }
+
     // CENTURIES
     if (totalSegments == centuries) {
       var displayedSegments = 0;
@@ -293,6 +322,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      currentCenturySet(currentSegment);
     }
 
     // DECADES
@@ -353,6 +383,29 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
 
+    // CENTURIES
+    if (totalSegments == centuries) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+      }
+      currentCenturySet(currentSegment);
+    }
+
     // DECADES
     if (totalSegments == decades) {
       var displayedSegments = 0;
@@ -406,6 +459,29 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
     }
 
+    // CENTURIES
+    if (totalSegments == centuries) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments + 1;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+      }
+      currentCenturySet(currentSegment);
+    }
+
     // DECADES
     if (totalSegments == decades) {
       var displayedSegments = 0;
@@ -414,7 +490,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       if (currentSegment + onScreenSegments > totalSegments) {
         displayedSegments = totalSegments - currentSegment + 1;
       } else {
-        displayedSegments = onScreenSegments;
+        displayedSegments = onScreenSegments + 1;
       }
 
       for (var i = 0; i < currentSegment - 1; i++) {
@@ -479,6 +555,28 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       if (summedSegments - screenSize.width >
           (xCoord.abs() - screenSize.width)) {
         break;
+      }
+    }
+
+    // DECADES
+    if (totalSegments == decades) {
+      var displayedSegments = 0;
+      var fillerSize = 0;
+
+      if (currentSegment + onScreenSegments > totalSegments) {
+        displayedSegments = totalSegments - currentSegment + 1;
+      } else {
+        displayedSegments = onScreenSegments;
+      }
+
+      for (var i = 0; i < currentSegment - 1; i++) {
+        fillerSize++;
+      }
+      currentStack
+          .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
+
+      for (var i = 0; i < displayedSegments; i++) {
+        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
     }
 

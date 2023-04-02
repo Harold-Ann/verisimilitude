@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'userInterface.dart';
-import 'lazyLoader.dart';
+import 'scale_display.dart';
+import 'lazy_loader.dart';
+import 'navigator_display.dart';
 
 void main() => runApp(const MyApp());
 
@@ -29,6 +30,10 @@ class MyApplication extends StatefulWidget {
 
   @override
   _MyAppState createState() => _MyAppState();
+}
+
+testingAgain(screenSize, time) {
+  print(time);
 }
 
 class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
@@ -183,26 +188,26 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 Row(
                   children: lazyLoad(
                       screenSize, _xValue, _yValue, _zValue, millenia, (1)),
-                  //12 millennia millennium 12
+                  //12 millennia millennium 12 per holocene/anthropocene
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, centuries, (2)),
+                      screenSize, _xValue, _yValue, _zValue, centuries, (4)),
                   //10 centuries century per millennia millennium 12 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, decades, (4)),
+                      screenSize, _xValue, _yValue, _zValue, decades, (16)),
                   //10 decades decade per centuries century 12 * 10 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, years, (16)),
+                      screenSize, _xValue, _yValue, _zValue, years, (64)),
                   //10 years year per decades decade 12 * 10 * 10 * 10
                 ),
                 Row(
                   children: lazyLoad(
-                      screenSize, _xValue, _yValue, _zValue, months, (64)),
+                      screenSize, _xValue, _yValue, _zValue, months, (256)),
                   //12 months month per years year 12 * 10 * 10 * 10 * 12
                 ),
               ],
@@ -210,26 +215,28 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           ),
         ),
         Align(
-          alignment: Alignment.bottomCenter,
+          alignment: Alignment.bottomLeft,
           child: Container(
             padding: EdgeInsets.all(16),
-            color: Colors.white,
+            decoration: BoxDecoration(
+              border:
+                  Border.all(width: 1.0, color: Color.fromARGB(255, 0, 0, 0)),
+              color: Colors.white,
+            ),
             width: 800,
-            height: 152,
+            height: 154,
             child: Row(
               children: [
-                Container(
-                  child: Column(
-                    children: [
-                      IconButton(
-                          onPressed: reset, icon: const Icon(Icons.business)),
-                      IconButton(
-                          onPressed: now, icon: const Icon(Icons.architecture)),
-                      IconButton(
-                          onPressed: () => moveLeft(_xValue),
-                          icon: const Icon(Icons.gamepad)),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    IconButton(
+                        onPressed: reset, icon: const Icon(Icons.business)),
+                    IconButton(
+                        onPressed: now, icon: const Icon(Icons.architecture)),
+                    IconButton(
+                        onPressed: () => moveLeft(_xValue),
+                        icon: const Icon(Icons.gamepad)),
+                  ],
                 ),
                 Text(
                   "Screen Size: ${screenSize.width}x${screenSize.height}\nCurrent Zoom: $roundedZ \nCoordinates:\nX:$roundedX Y: $roundedY",
@@ -246,6 +253,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
             ),
           ),
         ),
+        timescaleDisplay(screenSize, _zValue),
+        navigatorDisplay(screenSize, _xValue, _yValue, _zValue)
       ],
     ));
   }
