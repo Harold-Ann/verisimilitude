@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'scale_display.dart';
 import 'lazy_loader.dart';
 import 'navigator_display.dart';
+import 'image_loader.dart';
 
 void main() => runApp(const MyApp());
 
@@ -58,7 +59,23 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
       -148072500, -49308142, 0, 1);
 
   var matrix2 = Matrix4.identity();
-  var matrix3 = Matrix4.identity();
+  var matrix3 = Matrix4(
+      12.18249390703475,
+      0,
+      0,
+      0,
+      0,
+      12.18249390703475,
+      0,
+      0,
+      0,
+      0,
+      12.18249390703475,
+      0,
+      -10820.863236086378,
+      -5882.912109595874,
+      0,
+      1);
 
   var matrix5 = Matrix4.identity();
 
@@ -254,7 +271,11 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
           ),
         ),
         timescaleDisplay(screenSize, _zValue),
-        navigatorDisplay(screenSize, _xValue, _yValue, _zValue)
+        navigatorDisplay(screenSize, _xValue, _yValue, _zValue),
+        // Align(
+        //   alignment: Alignment.bottomCenter,
+        //   child: loadImageExample(),
+        // )
       ],
     ));
   }
@@ -262,7 +283,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
   void now() {
     final animationNow = Matrix4Tween(
       begin: controller.value,
-      end: matrix1,
+      end: matrix3,
     ).animate(controllerNow);
 
     animationNow.addListener(() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'navigator_display.dart';
+import 'image_loader.dart';
 
 randy(upper) {
   var randomNum = Random();
@@ -27,6 +28,32 @@ drawRect(totalAmount, screenSize, scaleFactor) {
   return timePeriod;
 }
 
+drawRectWithImage(totalAmount, screenSize, scaleFactor, imageTest) {
+  Widget timePeriod = Padding(
+      padding: EdgeInsets.fromLTRB(
+          0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
+      child: SizedBox(
+          width: screenSize.width / totalAmount,
+          height: (100 * ((1 / scaleFactor) * 2)).toDouble(),
+          child: Column(
+            children: [
+              SizedBox(
+                width: screenSize.width / totalAmount,
+                height: (100 * ((1 / scaleFactor) * 2)).toDouble() / 2,
+                child: Image.asset('images/egyptian_pyramids.jpg',
+                    fit: BoxFit.fitHeight),
+              ),
+              SizedBox(
+                width: screenSize.width / totalAmount,
+                height: (100 * ((1 / scaleFactor) * 2)).toDouble() / 2,
+                child:
+                    Image.asset('images/stonehenge.jpg', fit: BoxFit.fitHeight),
+              ),
+            ],
+          )));
+  return timePeriod;
+}
+
 fillerRect(totalAmount, fillerWidth, screenSize, scaleFactor) {
   Widget spaceTakerUpper = Padding(
     padding: EdgeInsets.fromLTRB(
@@ -43,6 +70,9 @@ fillerRect(totalAmount, fillerWidth, screenSize, scaleFactor) {
   );
   return spaceTakerUpper;
 }
+
+var currentMillTest = 0.0;
+var currentCentTest = 0.0;
 
 lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
   List<Widget> currentStack = [];
@@ -298,6 +328,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
+      currentMillTest = currentSegment;
       //print(currentSegment);
       currentMilleniaSet(currentSegment);
     }
@@ -306,6 +337,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
     if (totalSegments == centuries) {
       var displayedSegments = 0;
       var fillerSize = 0;
+      currentCentTest = currentSegment;
 
       if (currentSegment + onScreenSegments > totalSegments) {
         displayedSegments = totalSegments - currentSegment + 1;
@@ -318,10 +350,30 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
       currentStack
           .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
-
+      print("Milltest $currentMillTest");
+      print("Centtest $currentCentTest");
       for (var i = 0; i < displayedSegments; i++) {
-        currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+        if (i ==
+            currentCentTest -
+                ((currentCentTest - 5) + (currentCentTest - 70))) {
+          print("add ${(currentCentTest - 5)} + ${(currentCentTest - 70)} =");
+          print("result ${(currentCentTest - 5) + (currentCentTest - 70)} = ");
+          print("doing $i");
+          var imageTest = 'images/egyptian_pyramids.jpg';
+          currentStack.add(drawRectWithImage(
+              totalSegments, screenSize, scaleFactor, imageTest));
+        } else {
+          currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+        }
+        // gonna have to do:
+        // if millenium = -2000
+        // and if century = -600 or whatever
       }
+      // if (currentSegment == 75) {
+      //   loadImageExample();
+      //   print("TRYING");
+      // }
+      //print(currentSegment);
       currentCenturySet(currentSegment);
     }
 
