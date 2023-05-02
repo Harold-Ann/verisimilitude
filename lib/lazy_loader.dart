@@ -28,7 +28,7 @@ drawRect(totalAmount, screenSize, scaleFactor) {
   return timePeriod;
 }
 
-drawRectWithImage(totalAmount, screenSize, scaleFactor, imageTest) {
+drawRectWithImage(totalAmount, screenSize, scaleFactor, imageTop, imageBottom) {
   Widget timePeriod = Padding(
       padding: EdgeInsets.fromLTRB(
           0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -40,14 +40,12 @@ drawRectWithImage(totalAmount, screenSize, scaleFactor, imageTest) {
               SizedBox(
                 width: screenSize.width / totalAmount,
                 height: (100 * ((1 / scaleFactor) * 2)).toDouble() / 2,
-                child: Image.asset('images/egyptian_pyramids.jpg',
-                    fit: BoxFit.fitHeight),
+                child: Image.asset(imageTop, fit: BoxFit.fitHeight),
               ),
               SizedBox(
                 width: screenSize.width / totalAmount,
                 height: (100 * ((1 / scaleFactor) * 2)).toDouble() / 2,
-                child:
-                    Image.asset('images/stonehenge.jpg', fit: BoxFit.fitHeight),
+                child: Image.asset(imageBottom, fit: BoxFit.fitHeight),
               ),
             ],
           )));
@@ -350,18 +348,83 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       }
       currentStack
           .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
-      print("Milltest $currentMillTest");
-      print("Centtest $currentCentTest");
+      // print("Milltest $currentMillTest");
+      // print("Centtest $currentCentTest");
       for (var i = 0; i < displayedSegments; i++) {
+        print("current century: $currentCentTest");
+        /* for (var year = 1000; year < 2000; year + 100) {
+          print("year $year");
+          print((year - currentCentTest - 889 + (99 * ((year / 100) - 10))));
+          print(((year - currentCentTest) - 889 + (99 * ((year / 100) - 10))));
+          if (i ==
+              (year - currentCentTest - 889 + (99 * ((year / 100) - 10)))) {
+            print("activate");
+            var centuryImages = loadImageExample(year);
+            var imageTop = centuryImages[0];
+            var imageBottom = centuryImages[1];
+
+            currentStack.add(drawRectWithImage(
+                totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+          } else {
+            currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
+          }
+          print("cent $currentCentTest");
+        } */
+        var year = (1000);
+        var ex1 = (year -
+            currentCentTest -
+            (889 + (99 * ((year - 1000) / 100))) +
+            (99 * ((year / 100) - (year / 100))));
+        print("ex $ex1");
+        //print((200 * ((year - 1000) / 100)) - ((year - 1000) / 100));
+        //print(ex1 - ((200 * ((year - 1000) / 100))));
+        var h1 = (1000 - currentCentTest - 889 + (99 * ((1000 / 100) - 10)));
+        var h2 = (1100 - currentCentTest - 988 + (99 * ((1100 / 100) - 11)));
+        var h3 = (1200 - currentCentTest - 1087 + (99 * ((1200 / 100) - 12)));
+        print("h1 $h1, h2 $h2, h3 $h3");
+        print(
+            "yikes ${(year - currentCentTest - 889 + (99 * ((year / 100) - 10)))}");
+        print("YEAR ${((((currentCentTest / 10) * 10) - 100) * 100) - 100}");
         if (i ==
             currentCentTest -
                 ((currentCentTest - 5) + (currentCentTest - 70))) {
-          print("add ${(currentCentTest - 5)} + ${(currentCentTest - 70)} =");
-          print("result ${(currentCentTest - 5) + (currentCentTest - 70)} = ");
-          print("doing $i");
-          var imageTest = 'images/egyptian_pyramids.jpg';
+          var imageTop = 'images/egyptian_pyramids.jpg';
+          var imageBottom = 'images/stonehenge.jpg';
           currentStack.add(drawRectWithImage(
-              totalSegments, screenSize, scaleFactor, imageTest));
+              totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+        } else if (i == 1)
+        // (year - currentCentTest - 889 + (99 * ((year / 100) - 10))))
+        {
+          print("bingo");
+          //for (var anno = 1000; anno < 2000; anno + 100) {
+          //print(anno);
+          var centuryImages = loadImageExample(year);
+          var imageTop = centuryImages[0];
+          var imageBottom = centuryImages[1];
+
+          // currentStack.add(drawRectWithImage(
+          //     totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+
+          for (var now = 0; now < 10; now++) {
+            centuryImages = loadImageExample(year + (now * 100));
+            imageTop = centuryImages[0];
+            imageBottom = centuryImages[1];
+
+            currentStack.add(drawRectWithImage(
+                totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+          }
+
+          //}
+        } else if (i == ex1) {
+          print("IS A GO");
+          /*
+          var centuryImages = loadImageExample(year);
+          var imageTop = centuryImages[0];
+          var imageBottom = centuryImages[1];
+
+          currentStack.add(drawRectWithImage(
+              totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+              */
         } else {
           currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
         }
@@ -369,6 +432,7 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
         // if millenium = -2000
         // and if century = -600 or whatever
       }
+
       // if (currentSegment == 75) {
       //   loadImageExample();
       //   print("TRYING");
