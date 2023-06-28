@@ -28,7 +28,10 @@ drawRect(totalAmount, screenSize, scaleFactor) {
   return timePeriod;
 }
 
-drawRectWithImage(totalAmount, screenSize, scaleFactor, imageTop, imageBottom) {
+drawRectWithImage(totalAmount, screenSize, scaleFactor, year) {
+  var centuryImages = loadImageExample(year);
+  var imageTop = centuryImages[0];
+  var imageBottom = centuryImages[1];
   Widget timePeriod = Padding(
       padding: EdgeInsets.fromLTRB(
           0, ((screenSize.height) / 2) - (100 * (1 / scaleFactor)), 0, 0),
@@ -101,18 +104,22 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       var displayedSegments = 0;
       var fillerSize = 0;
 
+      // if the segment is near the very right wall, render less rectangles
       if (currentSegment + onScreenSegments > totalSegments) {
         displayedSegments = totalSegments - currentSegment + 1;
       } else {
         displayedSegments = onScreenSegments + 1;
       }
-
+      // render rectangles between left side of canvas and left side of viewport
       for (var i = 0; i < currentSegment - 1; i++) {
         fillerSize++;
       }
+
+      // add the new filler rectangles to the stack of rectangles
       currentStack
           .add(fillerRect(totalSegments, fillerSize, screenSize, scaleFactor));
 
+      // now add the actual rectangles to the stack of rectangles
       for (var i = 0; i < displayedSegments; i++) {
         currentStack.add(drawRect(totalSegments, screenSize, scaleFactor));
       }
@@ -337,10 +344,15 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       var fillerSize = 0;
       currentCentTest = currentSegment;
 
+      print(
+          "current:$currentSegment , onScreen:$onScreenSegments , total:$totalSegments");
+
       if (currentSegment + onScreenSegments > totalSegments) {
-        displayedSegments = totalSegments - currentSegment + 1;
+        displayedSegments = totalSegments - currentSegment - 8;
+        print("$displayedSegments r");
       } else {
-        displayedSegments = onScreenSegments;
+        displayedSegments = totalSegments - currentSegment - 9;
+        print("$displayedSegments e");
       }
 
       for (var i = 0; i < currentSegment - 1; i++) {
@@ -351,8 +363,9 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
       // print("Milltest $currentMillTest");
       // print("Centtest $currentCentTest");
       for (var i = 0; i < displayedSegments; i++) {
+        /*
         print("current century: $currentCentTest");
-        /* for (var year = 1000; year < 2000; year + 100) {
+        for (var year = 1000; year < 2000; year + 100) {
           print("year $year");
           print((year - currentCentTest - 889 + (99 * ((year / 100) - 10))));
           print(((year - currentCentTest) - 889 + (99 * ((year / 100) - 10))));
@@ -375,48 +388,42 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
             currentCentTest -
             (889 + (99 * ((year - 1000) / 100))) +
             (99 * ((year / 100) - (year / 100))));
-        print("ex $ex1");
+        //print("ex $ex1");
         //print((200 * ((year - 1000) / 100)) - ((year - 1000) / 100));
         //print(ex1 - ((200 * ((year - 1000) / 100))));
         var h1 = (1000 - currentCentTest - 889 + (99 * ((1000 / 100) - 10)));
         var h2 = (1100 - currentCentTest - 988 + (99 * ((1100 / 100) - 11)));
         var h3 = (1200 - currentCentTest - 1087 + (99 * ((1200 / 100) - 12)));
-        print("h1 $h1, h2 $h2, h3 $h3");
-        print(
-            "yikes ${(year - currentCentTest - 889 + (99 * ((year / 100) - 10)))}");
-        print("YEAR ${((((currentCentTest / 10) * 10) - 100) * 100) - 100}");
+        //print("h1 $h1, h2 $h2, h3 $h3");
+        //print("yikes ${(year - currentCentTest - 889 + (99 * ((year / 100) - 10)))}");
+        //print("YEAR ${((((currentCentTest / 10) * 10) - 100) * 100) - 100}");
         if (i ==
             currentCentTest -
                 ((currentCentTest - 5) + (currentCentTest - 70))) {
-          var imageTop = 'images/egyptian_pyramids.jpg';
-          var imageBottom = 'images/stonehenge.jpg';
-          currentStack.add(drawRectWithImage(
-              totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
-        } else if (i == 1)
+          currentStack.add(
+              drawRectWithImage(totalSegments, screenSize, scaleFactor, -2600));
+        } else if (i == ex1)
         // (year - currentCentTest - 889 + (99 * ((year / 100) - 10))))
         {
           print("bingo");
           //for (var anno = 1000; anno < 2000; anno + 100) {
           //print(anno);
-          var centuryImages = loadImageExample(year);
-          var imageTop = centuryImages[0];
-          var imageBottom = centuryImages[1];
 
           // currentStack.add(drawRectWithImage(
           //     totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
 
           for (var now = 0; now < 10; now++) {
-            centuryImages = loadImageExample(year + (now * 100));
-            imageTop = centuryImages[0];
-            imageBottom = centuryImages[1];
+            // centuryImages = loadImageExample(year + (now * 100));
+            // imageTop = centuryImages[0];
+            // imageBottom = centuryImages[1];
 
             currentStack.add(drawRectWithImage(
-                totalSegments, screenSize, scaleFactor, imageTop, imageBottom));
+                totalSegments, screenSize, scaleFactor, year + (now * 100)));
           }
 
           //}
         } else if (i == ex1) {
-          print("IS A GO");
+          //print("IS A GO");
           /*
           var centuryImages = loadImageExample(year);
           var imageTop = centuryImages[0];

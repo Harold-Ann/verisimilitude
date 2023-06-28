@@ -58,7 +58,8 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
   var matrix1 = Matrix4(98716, 0, 0, 0, 0, 98716, 0, 0, 0, 0, 98716, 0,
       -148072500, -49308142, 0, 1);
 
-  var matrix2 = Matrix4.identity();
+  var matrix2 = Matrix4(12.18249390703475, 0, 0, 0, 0, 12.18249390703475, 0, 0,
+      0, 0, 12.18249390703475, 0, -16400.740941051256, -5603.24046840416, 0, 1);
   var matrix3 = Matrix4(
       12.18249390703475,
       0,
@@ -196,7 +197,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                 // }
               });
             },
-            boundaryMargin: const EdgeInsets.all(0),
+            boundaryMargin: const EdgeInsets.all(200),
             minScale: 0.1,
             maxScale: 3269017,
             transformationController: controller,
@@ -251,8 +252,7 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
                     IconButton(
                         onPressed: now, icon: const Icon(Icons.architecture)),
                     IconButton(
-                        onPressed: () => moveLeft(_xValue),
-                        icon: const Icon(Icons.gamepad)),
+                        onPressed: then, icon: const Icon(Icons.gamepad)),
                   ],
                 ),
                 Text(
@@ -280,7 +280,35 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
     ));
   }
 
+  void reset() {
+    final animationReset = Matrix4Tween(
+      begin: controller.value,
+      end: Matrix4.identity(),
+    ).animate(controllerReset);
+
+    animationReset.addListener(() {
+      controller.value = animationReset.value;
+    });
+
+    controllerReset.reset();
+    controllerReset.fling();
+  }
+
   void now() {
+    final animationNow = Matrix4Tween(
+      begin: controller.value,
+      end: matrix2,
+    ).animate(controllerNow);
+
+    animationNow.addListener(() {
+      controller.value = animationNow.value;
+    });
+
+    controllerNow.reset();
+    controllerNow.fling();
+  }
+
+  void then() {
     final animationNow = Matrix4Tween(
       begin: controller.value,
       end: matrix3,
@@ -306,19 +334,5 @@ class _MyAppState extends State<MyApplication> with TickerProviderStateMixin {
 
     controllerLeft.reset();
     controllerLeft.fling();
-  }
-
-  void reset() {
-    final animationReset = Matrix4Tween(
-      begin: controller.value,
-      end: Matrix4.identity(),
-    ).animate(controllerReset);
-
-    animationReset.addListener(() {
-      controller.value = animationReset.value;
-    });
-
-    controllerReset.reset();
-    controllerReset.fling();
   }
 }
