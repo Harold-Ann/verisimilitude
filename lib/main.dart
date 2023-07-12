@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'dart:io' show Platform;
-import 'package:flutter/foundation.dart' show kIsWeb;
+//import 'dart:io' show Platform;
+//import 'package:flutter/foundation.dart' show kIsWeb;
 import 'scale_display.dart';
 import 'lazy_loader.dart';
 import 'navigator_display.dart';
-import 'image_loader.dart';
+//import 'image_loader.dart';
 
 void main() => runApp(const MyApp());
 

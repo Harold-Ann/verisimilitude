@@ -391,10 +391,14 @@ lazyLoad(screenSize, xCoord, yCoord, zCoord, totalSegments, scaleFactor) {
         //print("ex $ex1");
         //print((200 * ((year - 1000) / 100)) - ((year - 1000) / 100));
         //print(ex1 - ((200 * ((year - 1000) / 100))));
+
+        /*
         var h1 = (1000 - currentCentTest - 889 + (99 * ((1000 / 100) - 10)));
         var h2 = (1100 - currentCentTest - 988 + (99 * ((1100 / 100) - 11)));
         var h3 = (1200 - currentCentTest - 1087 + (99 * ((1200 / 100) - 12)));
         //print("h1 $h1, h2 $h2, h3 $h3");
+        */
+
         //print("yikes ${(year - currentCentTest - 889 + (99 * ((year / 100) - 10)))}");
         //print("YEAR ${((((currentCentTest / 10) * 10) - 100) * 100) - 100}");
         if (i ==

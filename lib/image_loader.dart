@@ -1,8 +1,10 @@
+/*
 import 'dart:async';
 import 'package:tuple/tuple.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'lazy_loader.dart';
+*/
 
 loadImageExample(yearCentury) {
   Map yearsToImages = {
